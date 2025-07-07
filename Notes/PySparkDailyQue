@@ -1,0 +1,723 @@
+day 1
+
+1.what is pyspark?
+-->
+PySpark is the Python API for Apache Spark, allowing users to harness the power of Spark's distributed computing capabilities
+using Python. It enables Python users to work with Resilient Distributed Datasets (RDDs), DataFrames, and SparkSQL, 
+facilitating large-scale data processing, machine learning, and more. 
+
+2.difference between pyspark and python?
+-->
+| Feature               | Python                               | PySpark                                               |
+| --------------------- | ------------------------------------ | ----------------------------------------------------- |
+| Scope                 | General-purpose language             | Big data processing tool (via Python)                 |
+| Performance           | Single-machine, slower on large data | Distributed, faster for big data                      |
+| Data Processing Tool  | Pandas, NumPy                        | Spark DataFrames, RDDs                                |
+| Execution Environment | Local                                | Clustered / Distributed (e.g., Hadoop, Spark cluster) |
+| Ease of Use           | Simpler syntax and debugging         | More setup required, but powerful                     |
+| Scalability           | Limited by system memory             | Designed to scale across clusters                     |
+
+
+3.What PySpark is used for?
+-->
+PySpark is an interface for Apache Spark in Python. With PySpark, you can write Python and SQL-like commands to manipulate
+and analyze data in a distributed processing environment. Using PySpark, data scientists manipulate data, build machine 
+learning pipelines, and tune models.
+
+4.What is the advantage of PySpark?
+-->
+1. Distributed Computing Power
+2. Python-Friendly API
+3. Fast Processing with In-Memory Computation
+4. Fault Tolerance
+5. Support for Multiple Data Sources
+6. Built-in Machine Learning & Graph Processing
+7. Scalability
+8. Easy Integration with Hadoop and Cloud
+
+5. What are the characteristics of PySpark?
+-->
+| Characteristic              | Description                                      |
+| --------------------------- | ------------------------------------------------ |
+| Distributed Computing       | Processes data in parallel across clusters       |
+| In-Memory Processing        | Faster execution using memory instead of disk    |
+| Lazy Evaluation             | Delays execution until needed for optimization   |
+| Fault Tolerance             | Recovers from failures using RDD lineage         |
+| Python API                  | Easy interface for Python developers             |
+| Multi-format Support        | Reads from CSV, JSON, Parquet, JDBC, Hive, etc.  |
+| Machine Learning Support    | Includes MLlib for scalable ML algorithms        |
+| Real-time Stream Processing | Supports streaming data via Spark Streaming      |
+| Scalability                 | Works on local to cloud-scale environments       |
+| Integration Friendly        | Connects with Hadoop, cloud, databases, and more |
+
+
+6.What is PySpark SparkContext?
+-->
+In PySpark, the SparkContext is the entry point to any Spark application. It represents the connection between your Python
+program and the Spark cluster (or local Spark instance), and it enables your program to access Spark's capabilities like:
+Distributed data processing
+Creating RDDs (Resilient Distributed Datasets)
+Reading data from files
+Setting configurations
+Running parallel operations
+
+7.What are RDDs in PySpark?
+-->
+RDD stands for Resilient Distributed Dataset.
+In PySpark, RDDs are the fundamental data structure used for fault-tolerant, distributed data processing.
+It i immutable means once it is creted can not be changed.
+Any transformation on RDD results in new RDD
+
+8.what is dataframe in pyspark?
+-->
+A DataFrame in PySpark is a distributed collection of data organized into named columns, similar to a table in a relational 
+database or a Pandas DataFrame in Python — but designed to handle big data efficiently using Spark's distributed processing 
+engine
+
+9.what is dataset in pyspark?
+-->
+In Apache Spark, a Dataset is a strongly-typed, distributed collection of data similar to a DataFrame, but with type safety 
+and object-oriented programming features.
+However, in PySpark, Dataset is not directly available because Python is a dynamically typed language and does not support 
+compile-time type checking like Scala or Java.
+
+10.difference between rdd,dataframe,dataset?
+-->
+| Term          | Supported In         | Description                                       |
+| ------------- | -------------------- | ------------------------------------------------- |
+| **RDD**       | Scala, Java, Python  | Low-level, untyped distributed collection         |
+| **DataFrame** | Scala, Java, Python  | High-level, structured data (like a table)        |
+| **Dataset**   | **Scala, Java only** | Typed version of DataFrame + RDD (not in PySpark) |
+
+--------------------------------------------------------------------------------------------------------------------------
+day2.
+1.Why do we use PySpark SparkFiles?
+-->
+SparkFiles in PySpark is a utility that helps you distribute external files (like .txt, .csv, .json, .jar, .zip, or even Python scripts) across all nodes in a Spark cluster, so that every executor can access those files during processing
+
+2.What are PySpark serializers?
+-->
+PySpark serializers are mechanisms used to convert Python objects into a format that can be efficiently sent over the network or stored, and then reconstructed (deserialized) on another machine in the Spark cluster.
+
+3.What are PySpark deserializers?
+-->
+PySpark Deserializers are the counterpart of serializers — they convert the serialized (byte stream) data back into usable Python objects after data is transmitted between the nodes in a Spark cluster.
+
+🔁 Summary:
+Term	        Purpose
+Serializer	    Converts Python object → Byte stream
+Deserializer	Converts Byte stream → Python object
+Use in Spark	Enables efficient data transfer & distributed processing
+
+4.what is meant by Transformation?
+-->
+In PySpark, a transformation is an operation on an RDD or DataFrame that defines a new dataset from an existing one without immediately executing it.
+
+5.what is action in pyspark?
+-->
+In PySpark, an Action is an operation that triggers the execution of all previously defined Transformations on an RDD or DataFrame and returns a result to the driver program or writes output to storage.
+
+6.Does PySpark provide a machine learning API?
+-->
+ Yes, PySpark provides a powerful Machine Learning API through its module calle
+pyspark.ml – the DataFrame-based Machine Learning API
+
+7.What are the different cluster manager types supported by PySpark?
+-->
+| Cluster Manager     | Description                                                                                  |
+| ------------------- | -------------------------------------------------------------------------------------------- |
+| **1. Standalone**   | Spark’s built-in simple cluster manager. Easy to set up, good for small/mid-scale workloads. |
+| **2. Apache Mesos** | General-purpose cluster manager. Can run Spark and other applications.                       |
+| **3. Hadoop YARN**  | Hadoop’s resource manager. Useful in Hadoop ecosystems (like HDFS, Hive).                    |
+| **4. Kubernetes**   | Cloud-native cluster manager. Suitable for containerized applications and cloud deployment.  |
+| **5. Local**        | Not really a cluster manager — runs Spark on a single machine (good for testing/debugging).  |
+
+8.What are the advantages of PySpark RDD?
+--> Advantages : 
+ 1. Fault Tolerance
+ 2. Distributed and Parallel Processing
+ 3. In-Memory Computation
+ 4. Lazy Evaluation
+ 5. Fine-Grained Control
+ 6. Supports Complex Operations
+ 
+9.what is executor in pyspark?
+-->
+Spark Executor is a JVM process launched on worker node.
+Key responsibility of spark executor :
+1.Task execution
+2.Data storage
+3.Reporting status
+
++----------------+     +------------------------+
+|   Spark Driver | --> | Cluster Manager        |
++----------------+     +------------------------+
+                              |
+                              v
+                   +-------------------------+
+                   |   Worker Node (Node 1)   |
+                   |  +-------------------+   |
+                   |  | Spark Executor #1 |   |
+                   |  +-------------------+   |
+                   +-------------------------+
+
+                   +-------------------------+
+                   |   Worker Node (Node 2)   |
+                   |  +-------------------+   |
+                   |  | Spark Executor #2 |   |
+                   |  +-------------------+   |
+                   +-------------------------+
+
+
+10. Is PySpark faster than pandas?
+-->
+Pandas :-
+1.Run on single machine
+2.Fast for small to medium datasets
+3.Fast for in memory operations
+
+PySpark :-
+1.Run on cluster and support parallel distributed computing
+2.Slower for small datasets
+3.Handle fault tolerence and out of memory operations gracefully.
+
+--------------------------------------------------------------------------------------------------------------------------
+day3
+1.What do you understand about PySpark DataFrames?
+-->
+Similar to a table in a relational database or spreadsheet, a dataframe is a distributed collection of data arranged into named columns.
+Characteristic :-
+1.Distributed
+2.Columnar
+3.Immustable
+4.Lazy evaluation
+5.Integration with spark sql
+
+Crestion of PySpark dataframe from various datasource including :-
+1.Existing RDDs
+2.Structured datafiles
+3.External databases
+4.List of python objects (e.g., lists of tuples, dictionaries, or pyspark.sql.Row objects)
+5.Pandas DataFrames
+
+2.What is SparkSession in Pyspark?
+--> It is the entrypoint to programming spark with the dataset and dataframe API
+To create SparkSession use following : 
+Spark = (
+	SparkSession.builder
+		.master("local")
+		.appName("Word Count")
+		.config("spark.some.config.option","Some-value")
+		.getOrCreate()
+	)
+3.difference between sparksession and spark context?
+--> 
+| Aspect             | SparkContext                                       | SparkSession                                                                                 |
+| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Core API           | RDD-based API                                     | Unifies DataFrame, SQL, Streaming, and Machine Learning APIs for a versatile programming model |
+| Required for       | Low-level operations like RDD creation            | High-level operations like reading files, DataFrames, and running SQL queries                |
+| Provides access to | Cluster resources                                 | Unified access to SparkContext, SQLContext, Catalog, and configuration, simplifying Spark application development |
+| Recommendation     | Legacy entry point (still available)              | Recommended entry point for new applications since Spark 2.0                                 |
+| Relationship       | Standalone object                                 | Encapsulates a SparkContext and provides unified access to all Spark functionality           |
+
+4.What are the types of PySpark’s shared variables and why are they useful?(write in brief)
+--> There are two types of shared variables :
+1.Broadcast variables
+2.Accumulators
+
+ 1. Broadcast Variables
+Purpose: Share read-only data (e.g., large lookup tables) across all worker nodes without sending it repeatedly with each task.
+Usefulness:
+Reduces network I/O.
+Improves performance for repetitive reads of the same data.
+Example Use Case: Joining a large static lookup table with another dataset.
+
+ 2. Accumulators
+Purpose: Used to aggregate information across tasks, like counters or sums.
+Usefulness:
+Helps in tracking metrics, debugging, or logging.
+Only the driver can read the value; workers can only add to it.
+Example Use Case: Counting the number of invalid records or errors during processing.
+
+
+5.What is PySpark UDF?
+-->
+1.It is user Defined Function written in python
+2.Use to apply non-native logic to DataFrame columns
+
+6.What is PySpark Architecture?(writen and learn it)
+-->
+Apache Spark follows a master-slave architecture consiting of 3 main component : 
+Driver,Cluster Manager, and Executors
+
+1.Driver Program 
+- Central co-ordinator of Spark application.
+- Runs a main function of spark code.
+- Contains :
+    1.SparkSession/SparkContext : entry point for Spark function
+    2.DAGScheduler : breaks jobs into stages
+    3.TaskSchedular : sends task to executor
+- Responsibility :
+    1.Converts user code into DAG
+    2.Coordinates the execution of tasks
+    3.Tracks progress and faults
+
+2.Cluster Manager
+- Allocates resources(CPU core,memory) across application
+- Types :
+    1.Standalone(default spark cluster)
+    2.YARN (Hadoop)
+    3.Mesos
+    4.Kubernetes
+- Responsibility : 
+    1.Launches executors on worker nodes based on requests from the driver.
+
+3.Executor : 
+- Worker processes launched on cluster nodes.
+- Each spark application has its own set of executors
+- Responsibility : 
+    1.Executes tasks assigned by the driver
+    2.Stores data in memory(RDD caching)
+    3.Sends results back to driver
+
+4.Tasks, Jobs, and stages
+1.Jobs  - Triggered by an action(like .collect() or .save())
+2.Stage - A set of tasks with no shuffle dependencies
+3.Task  - The smallest unit of execution 
+
+
+7.What PySpark DAGScheduler?
+-->
+The DAGScheduler in PySpark is a core component of the Spark execution engine that is responsible for building and scheduling 
+execution stages as a Directed Acyclic Graph (DAG) of stages and tasks.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+day4
+1.Why is PySpark SparkConf used?
+-->
+SparkConf set configurations to run spark application on local/cluster. 
+The following code block has the details of a SparkConf class for PySpark.
+# class pyspark.SparkConf(loadDefaults=True, _jvm=None, _jconf=None)
+It includes :
+1.App name
+2.Master (local/yarn/etc)
+3.Memory and core allocation
+4.Custom config properties
+##
+from pyspark import SparkConf, SparkContext
+
+conf = SparkConf() \
+    .setAppName("LogAnalysis") \
+    .setMaster("local[2]") \
+    .set("spark.executor.memory", "4g")
+
+sc = SparkContext(conf=conf)
+
+2.How to create SparkSession?
+-->
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("MyApp") \
+    .master("local[*]") \
+    .getOrCreate()
+
+builder : Initialize configurations
+.appName() : Sets the application name
+.master()  : Define cluster manager(local,YARN,etc)
+.getOrCreate() : Creates or retrive an existing SparkSession
+
+3.What is the common workflow of a spark program?
+-->
+1.Create SparkSession
+2.Load data (CSV,JSON,Parquet,etc.)
+3.Transform data (filter,select,groupby,join)
+4.Perform action or apply business logic
+5.Write output(HDFS,S#,local,Database,etc)
+6.Stop sparksession
+
+
+4.groupby in pyspark?
+-->
+In PySpark, groupBy() is used to group rows based on the values of one or more columns — similar to SQL's GROUP BY. It is 
+typically followed by an aggregation function like count(), sum(), avg(), etc.
+
+from pyspark.sql.functions import sum, avg
+
+df.groupBy("region").agg(
+    sum("sales").alias("total_sales"),
+    avg("sales").alias("avg_sales")
+).show()
+
+5.windowing function in pyspark?(write theory and code also)
+-->
+Window function apply on group of rows (like frame,partition) and return a single value for every input row.
+Ex : row_number(),rank(),dense_rank(),lag(),lead()
+
+# row_number() example
+from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number
+windowSpec  = Window.partitionBy("department").orderBy("salary")
+
+df.withColumn("row_number",row_number().over(windowSpec)).show(truncate=False)
+
+6.what is master,builder in sparksession?
+-->
+master : Defines where the spark application runs 
+Ex :  local,local[*],yarn,"spark://<host>:<port>"
+builder : Starts the configuration of the sparksession
+SparkSession.builder.appName("SalesApp").getOrCreate()
+
+7.How can we create DataFrames in PySpark?
+1. From a Python List (or List of Tuples)
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("CreateDF").getOrCreate()
+data = [("Alice", 25), ("Bob", 30), ("Cathy", 28)]
+columns = ["Name", "Age"]
+df = spark.createDataFrame(data, columns)
+df.show()
+
+2. From a List of Dictionaries
+data = [{"Name": "David", "Age": 22}, {"Name": "Eva", "Age": 31}]
+df = spark.createDataFrame(data)
+df.show()
+
+3. From a CSV File
+df = spark.read.csv("data/employees.csv", header=True, inferSchema=True)
+df.show()
+
+4. From JSON, Parquet, or other formats
+# JSON
+df = spark.read.json("data/people.json")
+# Parquet
+df = spark.read.parquet("data/sales.parquet")
+
+5. From RDD (Resilient Distributed Dataset)
+rdd = spark.sparkContext.parallelize([("John", 40), ("Sara", 35)])
+df = rdd.toDF(["Name", "Age"])
+df.show()
+
+--------------------------------------------------------------------------------------------------------------------------
+
+day5.
+1.Is it possible to create PySpark DataFrame from external data sources?
+-->
+yes,pyspark support reading data from:
+CSV,Json,Parque,ORC,Avro,Hive tables,etc.
+
+2.What is PySpark SQL?
+-->
+It allowes to process stuctured data using SQL queries,Dataframe API, and Dataset API.
+Run SQL queries on RDD and Dataframe
+Can read data of various format(CSV,JSon,Parque,Hive)
+
+Example: 
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("SQLExample").getOrCreate()
+df = spark.read.csv("data.csv", header=True, inferSchema=True)
+df.createOrReplaceTempView("my_table")
+result = spark.sql("SELECT name, salary FROM my_table WHERE salary > 50000")
+result.show()
+
+3.how to find 2nd higest salary in pyspark?
+-->
+spark = SparkSession.builder.appName("SecondHighestSalary").getOrCreate()
+
+# Example DataFrame
+data = [("Alice", 50000), ("Bob", 60000), ("Cathy", 70000), ("David", 60000)]
+columns = ["name", "salary"]
+df = spark.createDataFrame(data, columns)
+
+# Define window spec
+windowSpec = Window.orderBy(df["salary"].desc())
+
+# Add row number
+df_with_rank = df.withColumn("rank", row_number().over(windowSpec))
+
+# Filter for 2nd highest salary
+second_highest = df_with_rank.filter(df_with_rank["rank"] == 2)
+second_highest.show()
+
+
+4.How can you inner join two DataFrames?
+-->
+To inner join two DataFrames in PySpark, use the .join() method and specify the join column(s) and join type as "inner" (which is the default).
+
+result = df1.join(df2, on="id", how="inner")
+
+
+5.joins in pyspark and write all query of all joins in pyspark?
+-->
+1. Inner Join
+Returns rows with matching keys in both DataFrames.
+result = df1.join(df2, on="id", how="inner")
+
+2. Left Outer Join (Left Join)
+Returns all rows from the left DataFrame and matching rows from the right DataFrame.
+result = df1.join(df2, on="id", how="left")
+
+3. Right Outer Join (Right Join)
+Returns all rows from the right DataFrame and matching rows from the left DataFrame.
+result = df1.join(df2, on="id", how="right")
+
+
+4. Full Outer Join
+Returns all rows when there is a match in either left or right DataFrame.
+result = df1.join(df2, on="id", how="outer")
+
+5. Left Semi Join
+Returns only rows from the left DataFrame where there is a match in the right DataFrame.
+result = df1.join(df2, on="id", how="left_semi")
+
+6. Left Anti Join
+Returns only rows from the left DataFrame where there is no match in the right DataFrame.
+result = df1.join(df2, on="id", how="left_anti")
+
+| Join Type   | How Parameter  | Description                                 |
+|-------------|----------------|---------------------------------------------|
+| Inner Join  | "inner"        | Only matching rows                          |
+| Left Join   | "left"         | All left + matching right                   |
+| Right Join  | "right"        | All right + matching left                   |
+| Full Outer  | "outer"        | All rows from both                          |
+| Left Semi   | "left_semi"    | Only left rows with match in right          |
+| Left Anti   | "left_anti"    | Only left rows with NO match in right       |
+
+6.What do you understand by Pyspark Streaming? 
+-->
+1.Spark streaming is a scalable fault-tolerant streaming procress that support both batch and streaming workloads.
+2.It process realtime data from various sources like kafka,Flume and AMAZON Kinesis.
+
+7.What would happen if we lose RDD partitions due to the failure of the worker node?
+-->
+SPARK regenerates the RDD again by the help of linage. Basically until you are calling any action, spark don't start processing
+
+8.what are the types in transformation?(that is narrow and wide)
+-->
+Narrow : 
+1.Each output partition depends on single input partition.
+2.No data shuffle between nodes
+3.Localize computation within partition
+4.Faster execution
+Ex : map(), filter(), flatMap()
+
+Wide :
+1.it requires data from multiple partitiotons to createa single output partition
+2.Data shuffle between node.
+3.Generally slower due to data dsitribution.
+Ex : groupByKey(),reduceByKey(),join()
+
+--------------------------------------------------------------------------------------------------------------------------
+day6
+1.In-memory computation in pyspark?
+--> 
+Data kept in RAM instead of some slow disk
+Processed in parallel
+Key abstraction of spark is RDD and the RDD are cached using the cache() and persist() method.
+
+2. What is PySpark Storage Level?
+-->
+In PySpark, a Storage Level defines how and where an RDD or DataFrame's partitions are stored in the cluster after they are computed. It gives you fine-grained control over the trade-offs between performance (speed of access), memory usage, and fault tolerance.
+When you use the persist() method (or cache(), which is a shorthand for a specific storage level), you tell Spark to keep the data around for future use. The StorageLevel object specifies the exact strategy for this persistence.
+Most common PySpark Storage Levels : 
+1.StorageLevel.MEMORY_ONLY
+2.StorageLevel.MEMORY_ONLY_SER
+3.StorageLevel.MEMORY_AND_DISK
+4.StorageLevel.MEMORY_AND_DISK_SER
+5.StorageLevel.DISK_ONLY
+
+
+3.When do you use Spark Stage info?
+-->
+When we need for shuffling data between transformation we use Spark stage.It break down Spark job into smaller more 
+manageable units of work.
+Key reason : 
+1.Shuffling data
+2.Parallelism
+3.Job decomposition
+4.Scheduling
+5.Monitoring
+
+4. Can we use PySpark in the small data set?
+-->
+Yes, PySpark can be used with small datasets, but it is generally not recommended as its primary advantage lies in handling large, distributed datasets.
+
+5. What is PySpark Partition?
+-->
+In PySpark, data partitioning refers to the process of dividing a large dataset into smaller chunks or partitions, which can be processed concurrently.
+Methods :
+1.Hash Partitioning
+2.Range Partitioning
+3.Using partitionBy
+
+6. Tell me the different cluster manager types in PySpark.
+1.Standalone :
+Pros: Easy to set up, no additional dependencies, suitable for small clusters.
+Cons: Limited scalability, basic resource management.
+
+2.Hadoop YARN
+Pros: Robust resource management, integration with Hadoop ecosystem, high scalability.
+Cons: Complex setup, additional overhead from Hadoop.
+
+3. Apache Mesos:
+Pros: High scalability, supports multiple frameworks, efficient resource management.
+Cons: Complex setup, requires additional components.
+
+4. Kubernetes:
+Pros: Advanced resource management, containerization, high scalability, fault tolerance.
+Cons: Complex setup, requires containerization knowledge.
+
+
+7.how many partitions can you make in PySpark?
+-->
+By default, Dataframe shuffle operations create 200 partitions.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+day 7
+1.Why are Partitions immutable in PySpark?
+-->
+To ensure data partition cannot be altered once created.
+Understanding and leveraging this immutability can help developers write more efficient and reliable PySpark applications, capable of handling the complexities of big data with ease.
+
+2.what is repartitions in pyspark?
+-->
+pyspark.sql.DataFrame.repartition() method is used to increase or decrease the RDD/DataFrame partitions by number of partitions or by single column name or multiple column names. This function takes 2 parameters; numPartitions and *cols, when one is specified the other is optional. repartition() is a wider transformation that involves shuffling of the data hence, it is considered an expensive operation
+
+3.what is cache?
+-->
+Pyspark cache() method is used to cache the intermediate results of the transformation so that other transformation runs on top of cached will perform faster.
+cache() is a lazy evaluation in PySpark meaning it will not cache the results until you call the action operation.
+
+4.what is persisting? types?
+--> 
+It allowes to store the results of an RDD or DataFrame computation in memory, on disk, or a combination of both, across the nodes of your Spark cluster
+Types :
+Diffrent storageLevel.
+    
+5.what is coalesce?
+-->
+transformation operation used to reduce the number of partitions in an RDD or DataFrame
+
+6.difference between coalesce and partitions?
+-->
+| Feature                     | `partitions`                             | `coalesce()`                            |
+| --------------------------- | ---------------------------------------- | --------------------------------------- |
+| What it is                  | Number of data splits for parallel tasks | Function to reduce number of partitions |
+| Purpose                     | Determines parallelism                   | Optimizes partition reduction           |
+| Can it increase partitions? | ❌ No — just a concept                    | ❌ No — only reduces partitions          |
+| Can it reduce partitions?   | ❌ Not directly                           | ✅ Yes                                   |
+| Causes shuffle?             | N/A                                      | ❌ Avoids full shuffle                   |
+| Related API                 | `.getNumPartitions()`                    | `.coalesce(num)`                        |
+
+
+7.what are the file formats used in pyspark?
+-->
+CSV,JSON,AVRO,Parque,text,delta,ORC
+
+8.what are the optimization tech in pyspark?
+-->
+| #      | Technique                                 | Description                                                                               |
+| ------ | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
+| 1️⃣    | **Persist / Cache**                       | Avoid re-computation by storing intermediate results in memory.                           |
+| 2️⃣    | **Partitioning**                          | Proper partitioning helps distribute data evenly across nodes.                            |
+| 3️⃣    | **Broadcast Variables**                   | Use `broadcast()` to send small lookup tables to all executors, avoiding large shuffles.  |
+| 4️⃣    | **Avoid Shuffles**                        | Reduce operations like `groupByKey()` or `join` on skewed keys to minimize data movement. |
+| 5️⃣    | **Use Columnar Formats (Parquet/ORC)**    | Read only needed columns, improving I/O efficiency.                                       |
+| 6️⃣    | **Pushdown Filters / Predicate Pushdown** | Apply filters early so only required data is read from source.                            |
+| 7️⃣    | **Coalesce vs Repartition**               | Use `coalesce()` for reducing partitions efficiently (no full shuffle).                   |
+| 8️⃣    | **Avoid UDFs if possible**                | Use built-in Spark functions instead of Python UDFs for better performance.               |
+| 9️⃣    | **Use Catalyst Optimizer**                | Spark's internal query optimizer automatically rewrites queries for performance.          |
+| 🔟     | **Tungsten Execution Engine**             | Spark’s backend optimizes memory and CPU usage via code generation.                       |
+| 1️⃣1️⃣ | **Use `filter()` before `join()`**        | Reduce data volume before joins to avoid large shuffles.                                  |
+| 1️⃣2️⃣ | **Skew Handling**                         | Use techniques like salting when join keys are skewed.                                    |
+
+
+9.what is garbage collector in pyspark?
+-->
+Garbage Collector in PySpark manages memory cleanup on the JVM.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+day 8
+1.What are the key advantages of PySpark RDD?
+-->
+Adv : 
+1.In memory processing
+2.immutability
+3.Fault tolerant
+4.Lazy Evolution
+5.Partitioning
+
+2.what is lazy Lazy Evolution/transformation?
+-->
+When transformation applies on RDD, DataFrame or Dataset then it is not executed immediately.Sparks build a logical execution plan(DAG) and differs computation until an action id triggered.
+
+3.what is Fault Tolerance?
+-->
+It is the system ability to continue operating and recovering from failures without losing data or requiring a complete restart of the computation.
+
+4.What do you understand by Spark driver?
+-->
+1.It is core component to communicate between spark application.
+2.It manages the execution flow of spark application.
+3.Responsible for tasks on executor, scheduling work, etc.
+4.Process the main function
+
+
+5.What are the main functions of Spark core?
+-->
+1.Task scheduling
+2.Memory management
+3.Falut tolerance
+4.RDD API
+5.I/O support
+6.Cluster management
+7.logging and Monitoring
+
+6.What do you understand by RDD Lineage?
+-->
+— RDD lineage refers to the logical sequence of transformations that were applied to create an RDD from its source data or other RDDs.
+— It represents the history of how data is derived and transformed, step by step, from its original form to the current RDD.
+— RDD lineage is used for fault tolerance. When a node fails, Spark can reconstruct lost partitions by reapplying the transformations specified in the lineage.
+— Lineage information is recorded for each RDD, which enables Spark to recompute lost data efficiently without needing to store the entire dataset.
+— RDD lineage ensures that lost data can be recovered by re-executing only the necessary transformations.
+
+7.What are the main file systems supported by Spark?
+-->
+1.HDFS
+2.Amazon S3
+3.Local
+
+8.Explain the use of StructType and StructField classes in PySpark with examples.
+-->
+StructType: Represents the entire schema as a structure of fields (like a table with columns).
+StructField: Represents a single column in the schema (name, data type, nullable).
+
+`from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+
+spark = SparkSession.builder.appName("SchemaExample").getOrCreate()
+
+# Define the schema
+data_schema = StructType([
+    StructField("first_name", StringType(), True),
+    StructField("last_name", StringType(), True),
+    StructField("age", IntegerType(), True)
+])
+
+# Sample data
+data = [
+    ("Alice", "Smith", 30),
+    ("Bob", "Johnson", 25),
+    ("Charlie", None, 35) # Example with a null value
+]
+
+# Create a DataFrame with the specified schema
+df = spark.createDataFrame(data, schema=data_schema)
+
+df.printSchema()
+df.show()
+
+spark.stop()`
