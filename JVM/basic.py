@@ -29,4 +29,6 @@ area_of_circle = pi * r * r
 print(area_of_circle)
 print('*'* 80)
 
-
+lst = [1,2,3,4,5,6]
+rev_lst = lst.reverse()
+print(lst)
