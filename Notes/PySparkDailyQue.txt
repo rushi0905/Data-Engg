@@ -886,3 +886,134 @@ unpivoted_df.show()
 | Built-in Function     | Yes (pivot() is built-in with grouping and agg)     | No (achieved using stack() and selectExpr())       |
 | Aggregation Needed    | Yes (like sum, count, etc.)                         | No (you’re restructuring, not aggregating)         |
 
+--------------------------------------------------------------------------------------------------------------------------
+
+day10.
+1.In PySpark, how do you generate broadcast variables? Give an example.
+-->
+The PySpark Broadcast is created using the broadcast(v) method of the SparkContext class. This method takes the argument v that you want to broadcast
+Ex : 
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
+
+states = {"NY":"New York", "CA":"California", "FL":"Florida"}
+broadcastStates = spark.sparkContext.broadcast(states)
+
+data = [("James","Smith","USA","CA"),
+    ("Michael","Rose","USA","NY"),
+    ("Robert","Williams","USA","CA"),
+    ("Maria","Jones","USA","FL")
+  ]
+
+columns = ["firstname","lastname","country","state"]
+df = spark.createDataFrame(data = data, schema = columns)
+df.printSchema()
+df.show(truncate=False)
+
+def state_convert(code):
+    return broadcastStates.value[code]
+
+result = df.rdd.map(lambda x: (x[0],x[1],x[2],state_convert(x[3]))).toDF(columns)
+result.show(truncate=False)
+
+2.How is Apache Spark different from MapReduce?
+-->
+Processing speed: Apache Spark is much faster than Hadoop MapReduce.
+Data processing paradigm: Hadoop MapReduce is designed for batch processing, while Apache Spark is more suited for real-time data processing and iterative analytics.
+Ease of use: Apache Spark has a more user-friendly programming interface and supports multiple languages, while Hadoop MapReduce requires developers to write code in Java.
+Fault tolerance: Apache Spark's Resilient Distributed Datasets (RDDs) offer better fault tolerance than Hadoop MapReduce's Hadoop Distributed File System (HDFS).
+Integration: Apache Spark has a more extensive ecosystem and integrates well with other big data tools, while Hadoop MapReduce is primarily designed to work with Hadoop Distributed File System (HDFS).
+
+3.Under what scenarios are Client and Cluster modes used for deployment?
+-->
+| Feature             | **Client Mode**                      | **Cluster Mode**                    |
+| ------------------- | ------------------------------------ | ----------------------------------- |
+| Driver runs on      | Machine that runs `spark-submit`     | A cluster node                      |
+| Best for            | Development / interactive workloads  | Production / scheduled workloads    |
+| Network requirement | Client must access cluster nodes     | Cluster manages everything          |
+| Fault tolerance     | Lower (if client crashes, job fails) | Higher (driver runs in cluster)     |
+| Logs shown          | Immediately on client console        | Stored in cluster (e.g., YARN logs) |
+
+In summary:
+Use Client Mode for development, testing, and debugging.
+Use Cluster Mode for production and reliable, long-running jobs.
+
+4.What do you mean by checkpointing in PySpark?
+-->
+It is used to truncate the logical plan of DataFrame, which is especially useful in iterative algorithms where the plan may grow exponentially. It will be saved to files inside the checkpoint directory set with SparkContext.setCheckpointDir(), or spark.checkpoint.dir configuration.
+Ex : 
+%python
+df = spark.createDataFrame([
+    (14, "Tom"), (23, "Alice"), (16, "Bob")], ["age", "name"])
+
+# Set the checkpoint directory to DBFS
+spark.sparkContext.setCheckpointDir("dbfs:/tmp/checkpoints")
+
+# Checkpoint the DataFrame
+df.checkpoint(False)
+
+display(df) 
+
+5.What do you understand by Lineage Graph in PySpark?
+-->
+1.It represents the logical execution plan that tracks all transformations applied to RDD or DataFrame.
+2.It shows how your data flow from source to destination.
+
+6.Define the role of Catalyst Optimizer in PySpark.
+-->
+The Catalyst Optimizer is the query optimization engine used by Apache Spark (especially with DataFrames and SQL).
+To automatically optimize queries by transforming logical plans into efficient physical plans — leading to faster execution and better resource utilization
+It executes in 4 phases :
+1.Analysis 
+2.Logical optimization
+3.physical planning
+4.Code generation
+Optimizations:
+• Constant folding
+• Predicate pushdown
+• Join reordering
+
+7.Explain how Apache Spark Streaming works with receivers.
+-->
+• Receivers read data from sources (Kafka, Flume, TCP, etc.)
+• Data stored in memory/DStream
+• Passed to Spark Engine for processing in micro-batches
+from pyspark.streaming import StreamingContext
+ssc = StreamingContext(sc, 10) # batch interval = 10 sec
+lines = ssc.socketTextStream("localhost", 9999)
+
+8.python- difference between list tuple set,set and frozen set,byte and byte array.
+-->
+List: An ordered, mutable collection allowing duplicates. Supports indexing/slicing. Not hashable (cannot be dict keys/set elements). Ideal for frequent changes (append, remove, update).
+
+Tuple: Ordered, immutable collection allowing duplicates. Supports indexing/slicing. Hashable (can be dict keys). Use for fixed-size, read-only collections.
+
+Set: Unordered, mutable collection of unique elements (no duplicates). No indexing/slicing. Elements must be immutable/hashable. Fast membership testing; ideal for uniqueness/quick lookup.
+
+Frozenset: Unordered, immutable collection of unique elements. No indexing/slicing. Hashable (can be dict keys/set elements). Use for set-like collections that shouldn't change.
+
+Bytes: Immutable sequence of binary data. Ordered, supports indexing/slicing, hashable. Used for binary I/O, network operations, encoded strings.
+
+Bytearray: Mutable sequence of binary data. Ordered, supports indexing/slicing, not hashable. Used for modifying binary data in place (byte streams/buffers).
+
+9.sql-windwoinf function -rownumber,rank,denserank,lead,lag.
+-->
+ROW_NUMBER: Assigns a unique, sequential number to each row within a partition.
+SELECT name, ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num FROM employees;
+
+RANK: Assigns rank to rows, with the same rank for ties and gaps in the ranking.
+SELECT name, RANK() OVER (ORDER BY salary DESC) AS rank FROM employees;
+
+DENSE_RANK: Like RANK, but without gaps after ties.
+SELECT name, salary, LEAD(salary) OVER (ORDER BY id) AS next_salary FROM employees;
+
+LEAD: Accesses the next row’s value within a partition (forward-looking).
+SELECT name, salary, LEAD(salary) OVER (ORDER BY id) AS next_salary FROM employees;
+
+LAG: Accesses the previous row’s value within a partition (backward-looking).
+SELECT name, salary, LAG(salary) OVER (ORDER BY id) AS prev_salary FROM employees;
+
+
+--------------------------------------------------------------------------------------------------------------------------

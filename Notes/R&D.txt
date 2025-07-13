@@ -1,0 +1,79 @@
+| Pandas (Pros)                                 | SQL (Pros)                                   |
+|-----------------------------------------------|----------------------------------------------|
+| User-friendly syntax                          | Optimal performance for large datasets       |
+| Excellent for exploratory data analysis       | Efficient querying and indexing              |
+| Seamless integration with Python              | Robust data integrity and consistency        |
+
+| Pandas (Cons)                                | SQL (Cons)                                  |
+|-----------------------------------------------|----------------------------------------------|
+| Slower performance for large datasets         | Steeper learning curve                      |
+| Limited support for complex joins             | Syntax variations across database systems    |
+
+
+Common Errors and Solutions
+Pandas Common Errors
+Memory Issues: Handling large datasets in Pandas may lead to memory errors. To address this, consider processing data in chunks or using more memory-efficient data types.
+
+Inefficient Iteration: Iterating over rows in a DataFrame can be slow. Utilize vectorized operations in Pandas to enhance performance.
+
+SQL Common Errors
+Poorly Optimized Queries: Unoptimized SQL queries can be a bottleneck. Ensure your queries are well-structured, and consider indexing columns frequently used in search conditions.
+
+Incorrect Joins: Misusing or omitting join conditions can lead to incorrect results. Double-check your join statements and ensure they match your data relationships.
+
+#############################################################################################################################
+
+**In SQL, the GROUP BY clause is used to group rows that have the same values in one or more columns into summary rows, while the HAVING clause is used to filter these grouped rows based on a specified condition. The WHERE clause filters individual rows before grouping, while the HAVING clause filters groups after they are formed.**
+
+GROUP BY Clause:
+Purpose: Groups rows based on the values in specified columns.
+Syntax: GROUP BY column1, column2, ...
+Usage: Used to aggregate data, calculate summary statistics for each group, and perform analysis on grouped data.
+Example: SELECT department, AVG(salary) FROM employees GROUP BY department; (calculates the average salary for each department) 
+
+HAVING Clause:
+Purpose: Filters the grouped rows based on a condition.
+Syntax: HAVING condition
+Usage: Used to filter the results of a GROUP BY query, typically based on aggregate functions like SUM, AVG, COUNT, MAX, or MIN.
+Example: SELECT department, AVG(salary) FROM employees GROUP BY department HAVING AVG(salary) > 50000; (selects departments with an average salary greater than 50000) 
+
+Key Differences:
+Filtering Scope: WHERE filters rows before grouping, while HAVING filters groups after grouping.
+Aggregate Functions: HAVING can use aggregate functions in its condition, while WHERE cannot.
+Order of Execution: WHERE is executed before GROUP BY, and HAVING is executed after GROUP BY. 
+
++-------------------------------------------------------------+
+| Example:                                                    |
+|                                                             |
+| SELECT department, COUNT(*) as num_employees                |
+| FROM employees                                              |
+| WHERE salary > 30000                                        |
+| GROUP BY department                                         |
+| HAVING COUNT(*) > 5;                                        |
++-------------------------------------------------------------+
+
+In this example: 
+WHERE salary > 30000 filters out employees with salaries less than or equal to 30000.
+GROUP BY department groups the remaining employees by department.
+HAVING COUNT(*) > 5 filters the grouped departments, selecting only those with more than 5 employees.
+
+#############################################################################################################################
+
+etl_project/
+│
+├── etl/
+│   ├── __init__.py
+│   ├── config.py               # DB and email settings
+│   ├── extract.py              # Extract CSV data
+│   ├── transform.py            # Clean and format data
+│   ├── load.py                 # Insert/Upsert to MySQL
+│   └── alerts.py               # Email alert logic
+│
+├── logs/
+│   └── etl.log                 # Auto-generated logs
+│
+├── data/
+│   └── new_sales_data.csv      # Source file
+│
+├── run_etl.py                  # Main driver script
+└── README.md

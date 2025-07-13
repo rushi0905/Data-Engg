@@ -1,0 +1,13 @@
+lst = [1,2,3,4,5]
+#lst.reverse()
+#print(lst)
+
+#or
+#rev_lst = lst[::-1]
+#print(rev_lst)
+
+#or
+rev_lst = []
+for item in lst:
+    rev_lst = [item] + rev_lst
+print(rev_lst)

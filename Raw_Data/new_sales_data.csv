@@ -3,3 +3,100 @@ id,customer_name,amount,last_updated
 102,Bob,150.50,2025-07-01 11:00:00
 103,Charlie,320.75,2025-07-01 12:30:00
 104,Diana,400.00,2025-07-01 14:00:00
+105,Customer105,one hundred,2025-07-12 16:00:00
+106,👾💥@#!,237.14,2025-07-12 16:00:00
+107,Customer107,312.23,not_a_date
+101,Customer108,432.10,2025-07-12 16:00:00
+109,Customer109,,2025-07-12 16:00:00
+110,Customer110,198.55,not_a_date
+111,Customer111,one hundred,2025-07-12 16:00:00
+112,👾💥@#!,267.94,2025-07-12 16:00:00
+113,Customer113,380.21,not_a_date
+102,Customer114,412.12,2025-07-12 16:00:00
+115,Customer115,NaN,2025-07-12 16:00:00
+116,👾💥@#!,,not_a_date
+117,,150.00,2025-07-12 16:00:00
+118,Customer118,INVALID,2025-07-12 16:00:00
+119,Customer119,299.11,2025-07-12 16:00:00
+120,Customer120,299.11,2025-13-01 25:61:00
+121,Customer121,250,2025/07/12 16:00:00
+122,👾💥@#!,one hundred ten,2025-07-12 16:00:00
+103,Customer123,350.25,2025-07-12 16:00:00
+124,Customer124,,""
+125,Customer125,100.0,
+126,Customer126,,not_a_date
+127,Customer127,!!$#%,2025-07-12 16:00:00
+128,👾💥@#!,333.33,not_a_date
+129,Customer129,200.00,invalid_date
+130,Customer130,NaN,2025-07-12 16:00:00
+131,Customer131,400.00,
+132,Customer132,300,garbled_date
+133,👾💥@#!,INVALID,INVALID
+134,Customer134,,INVALID
+135,Customer135,onehundredfifty,2025-07-12 16:00:00
+136,Customer136,499.99,2025-07-32 16:00:00
+137,,399.99,not_a_date
+138,Customer138,299.99,2025-07-12T16:00:00
+139,Customer139,,2025-07-12 16:00:00
+140,👾💥@#!,INVALID,not_a_date
+141,Customer141,abc,def
+142,Customer142,100.00,NaN
+143,Customer143,300.00,?
+144,Customer144,one_two_three,2025-07-12 16:00:00
+145,Customer145,@@@,@@@
+146,Customer146,,,
+147,Customer147,300.00
+148,Customer148,,
+149,👾💥@#!,,,
+150,Customer150,100.00,not_a_date
+151,Customer151,one.00,2025-07-12 16:00:00
+152,Customer152,?,?
+153,Customer153,350,07-12-2025 16:00:00
+154,Customer154,NaN,2025-07-12 16:00:00
+155,Customer155,"",2025-07-12 16:00:00
+156,👾💥@#!,275.5,not_a_date
+157,Customer157,abc123,2025-07-12 16:00:00
+158,Customer158,one hundred fifty,2025-07-12 16:00:00
+159,,,
+160,Customer160,350.75,garbage
+161,Customer161,NaN,NaN
+162,Customer162,NaN,
+163,Customer163,,,
+164,👾💥@#!,NaN,not_a_date
+165,Customer165,123abc,2025-07-12 16:00:00
+166,Customer166,300.00,2025/13/01
+167,Customer167,99.99,invalid time
+168,Customer168,NaN,NaN
+169,Customer169,444,not_a_date
+170,Customer170,onehundred,2025-07-12 16:00:00
+171,Customer171,200.00,2025-07-12 99:99:99
+172,👾💥@#!,not_a_number,not_a_date
+173,Customer173,300.00,NaN
+174,Customer174,250.50,NaN
+175,Customer175,350.00,not_a_date
+176,Customer176,NaN,NaN
+177,Customer177,,""
+178,Customer178,INVALID,2025-07-12 16:00:00
+179,Customer179,200.0,error_date
+180,👾💥@#!,one hundred and one,2025-07-12 16:00:00
+181,Customer181,233.2,NaN
+182,Customer182,NaN,NaN
+183,Customer183,?%#,2025-07-12 16:00:00
+184,Customer184,,not_a_date
+185,Customer185,NaN,NaN
+186,Customer186,%%%,??
+187,Customer187,not_available,not_a_date
+188,Customer188,,,
+189,Customer189,NaN,invalid
+190,Customer190,NaN,2025-07-12 16:00:00
+191,👾💥@#!,UNKNOWN,UNKNOWN
+192,Customer192,NaN,NaN
+193,,NaN,NaN
+194,Customer194,400.00,2025-07-12 16:00:00
+195,Customer195,350.50,error
+196,Customer196,,NaN
+197,Customer197,invalid,NaN
+198,Customer198,one_hundred,,,
+199,Customer199,123.45,wrong_format
+200,👾💥@#!,NaN,NaN
+204,Customer204,250.25,not_a_date

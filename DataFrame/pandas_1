@@ -1,0 +1,34 @@
+import pandas as pd 
+data = {'id' : [1,2,3,4],
+        'name' : ['Ram','Sham','John','Don'],
+        'age' : [10,20,33,22] 
+        } 
+df = pd.DataFrame(data)
+print(df)
+
+# select * from table where age > 30
+
+result = df[df['age']>30]
+print(result)
+
+
+### 2. *WHERE* (Filter data based on conditions)
+#    *SQL*: SELECT * FROM table WHERE condition;  
+#    *Pandas*: Use boolean indexing or .query() to filter rows.
+
+### 3. *INSERT* (Add rows to the DataFrame)
+#    *SQL*: INSERT INTO table VALUES (...);  
+#    *Pandas*: Use .append() or pd.concat() to add new rows.
+
+new_data = {'id': 5, 'name':'Motu','age':24}
+# df = df.append(new_data,ignore_index=True) -> append is deprecated in pandas 2.0
+df = pd.concat([df,pd.DataFrame([new_data])],ignore_index=True)
+print(df)
+
+### 4. *UPDATE* (Modify existing data)
+#    *SQL*: UPDATE table SET column = value WHERE condition;  
+#    *Pandas*: Directly modify the DataFrame using indexing.
+
+df.loc[df['name'] == 'Ram','age'] = 30
+print(df)
+

@@ -99,18 +99,18 @@ Each key must be unique, values can be duplicated.
 
 ### String and List Operations
 s = "Hello World"
-| Operation            | Example                      | Output               |
-| -------------------- | ---------------------------- | -------------------- |
-| Access by index      | `s[0]`                       | `'H'`                |
-| Length               | `len(s)`                     | `11`                 |
-| Slicing              | `s[0:5]`                     | `'Hello'`            |
-| Convert to lowercase | `s.lower()`                  | `'hello world'`      |
-| Convert to uppercase | `s.upper()`                  | `'HELLO WORLD'`      |
-| Replace              | `s.replace("World", "GPT")`  | `'Hello GPT'`        |
-| Split into list      | `s.split()`                  | `['Hello', 'World']` |
-| Join list to string  | `' '.join(['Hello', 'GPT'])` | `'Hello GPT'`        |
-| Strip spaces         | `'  hello  '.strip()`        | `'hello'`            |
-| Check substring      | `'World' in s`               | `True`               |
+| Operation              | Example                      | Output               |
+|------------------------|------------------------------|----------------------|
+| Access by index        | `s[0]`                       | `'H'`                |
+| Length                 | `len(s)`                     | `11`                 |
+| Slicing                | `s[0:5]`                     | `'Hello'`            |
+| Convert to lowercase   | `s.lower()`                  | `'hello world'`      |
+| Convert to uppercase   | `s.upper()`                  | `'HELLO WORLD'`      |
+| Replace                | `s.replace("World", "GPT")`  | `'Hello GPT'`        |
+| Split into list        | `s.split()`                  | `['Hello', 'World']` |
+| Join list to string    | `' '.join(['Hello', 'GPT'])` | `'Hello GPT'`        |
+| Strip spaces           | `'  hello  '.strip()`        | `'hello'`            |
+| Check substring        | `'World' in s`               | `True`               |
 
 List operation : 
 lst = [1, 2, 3, 4]
@@ -239,6 +239,7 @@ print(x(3,4))
 -->
 A decorator is a function that takes another function as an argument, adds some functionality, and returns a new function. This allows you to "wrap" another function to extend its behavior (adding some functionality before or after) without modifying the original function's source code.
 # A simple decorator function
+# Step 1: Define a decorator function
 def decorator(func):
   
     def wrapper():
@@ -248,12 +249,14 @@ def decorator(func):
     return wrapper
 
 # Applying the decorator to a function
+# Step 2: Apply the decorator using @
 @decorator
-
 def greet():
     print("Hello, World!")
 
+# Step 3: Call the decorated function
 greet()
+
 
 24. *What are classes, objects, and functions in Python?*
 -->
@@ -294,7 +297,9 @@ Global - Defined outside the function and accessed in the entire code
 
 28. *What is Pandas in Python?*
 -->
-It is open-source Python library which is used for data manipulation and analysis.
+Pandas is an open-source data manipulation library for Python. 
+It provides data structures and functions for working with structured data, including data frames and series. 
+Pandas is built on top of NumPy and is known for its ease of use and flexibility
 
 29. *How to create a DataFrame in Pandas?*
 --> By using core function like - pd.DataFrame()

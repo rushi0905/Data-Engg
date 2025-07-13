@@ -159,3 +159,13 @@ SELECT *
 FROM mom_yoy_calc
 ORDER BY sale_date;
 
+-- use case : 7
+SELECT
+    c.region,
+    p.category,
+    SUM(s.sale_amount) AS total_sales
+FROM sales s
+JOIN customers c ON s.customer_id = c.customer_id
+JOIN products p ON s.product_id = p.product_id
+WHERE c.region = 'India' AND s.sale_amount > 1000
+GROUP BY c.region, p.category;

@@ -1,0 +1,40 @@
+import pandas as pd
+
+# Sales Data
+sales = pd.DataFrame({
+    'sale_id': [1, 2, 3, 4],
+    'customer_id': [101, 102, 103, 101],
+    'product_id': [201, 202, 203, 202],
+    'sale_date': ['2024-01-10', '2024-01-15', '2024-02-05', '2024-03-12'],
+    'sale_amount': [500, 1500, 2000, 1200]
+})
+
+# Customer Data
+customers = pd.DataFrame({
+    'customer_id': [101, 102, 103],
+    'customer_name': ['Alice', 'Bob', 'Charlie'],
+    'region': ['India', 'USA', 'India']
+})
+
+# Product Data
+products = pd.DataFrame({
+    'product_id': [201, 202, 203],
+    'product_name': ['Laptop', 'Phone', 'Desk'],
+    'category': ['Electronics', 'Electronics', 'Furniture']
+})
+
+
+# Merge sales with customers
+sales_customers = pd.merge(sales, customers, on='customer_id', how='inner')
+
+# Merge with products
+full_data = pd.merge(sales_customers, products, on='product_id', how='inner')
+
+filtered_data = full_data[
+    (full_data['region'] == 'India') &
+    (full_data['sale_amount'] > 1000)
+]
+
+result = filtered_data.groupby(['region', 'category'])['sale_amount'].sum().reset_index()
+result.rename(columns={'sale_amount': 'total_sales'}, inplace=True)
+print(result)
