@@ -77,3 +77,40 @@ etl_project/
 │
 ├── run_etl.py                  # Main driver script
 └── README.md
+
+🔍 WHERE Clause
+- Purpose: Filters individual rows before any grouping or aggregation.
+- Used with: Regular columns (not aggregate functions).
+- Example:
+SELECT * FROM sales
+WHERE region = 'West' AND quantity > 10;
+- ✅ Filters raw data before grouping.
+
+📦 GROUP BY Clause
+- Purpose: Groups rows that share the same values in specified columns.
+- Used with: Aggregate functions like SUM(), AVG(), COUNT(), etc.
+- Example:
+SELECT region, SUM(sales) FROM sales
+GROUP BY region;
+- ✅ Organizes data into buckets for aggregation.
+
+🧮 HAVING Clause
+- Purpose: Filters groups after aggregation.
+- Used with: Aggregate functions.
+- Example:
+SELECT region, SUM(sales) AS total_sales
+FROM sales
+GROUP BY region
+HAVING SUM(sales) > 50000;
+- ✅ Applies conditions to grouped results.
+
+🧠 Execution Order (Behind the Scenes)
+- FROM
+- WHERE
+- GROUP BY
+- HAVING
+- SELECT
+- ORDER BY
+This order explains why HAVING can use aggregate functions but WHERE cannot.
+
+#############################################################################################################################

@@ -2,6 +2,23 @@
 import pandas as pd
 from alerts import send_email
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Configure logging BEFORE imports
+logging.basicConfig(
+    filename='logs/etl.log',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s:%(message)s'
+)
+
+# Optional: stream to console too
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
 
 def transform_data(df):
     try:
@@ -36,3 +53,55 @@ def transform_data(df):
         send_email("❌ Transform Failed", str(e))
         raise
 
+
+def transform_to_pivot(df):
+    logger.info("🔄 Starting pivot transformation...")
+
+    # Check for required columns
+    required_cols = ['product_id', 'sale_amount', 'sale_date']
+    for col in required_cols:
+        if col not in df.columns:
+            logger.error(f"❌ Required column '{col}' missing.")
+            raise ValueError(f"Required column '{col}' missing in input data.")
+
+    logger.info("✅ Required columns verified.")
+
+    # Convert to datetime
+    df['sale_date'] = pd.to_datetime(df['sale_date'])
+    logger.info("📅 Converted 'sale_date' to datetime.")
+
+    # Add category if missing
+    if 'category' not in df.columns:
+        logger.info("📦 'category' column not found — mapping from product_id...")
+        product_map = {
+            101: 'Electronics',
+            102: 'Home Appliances',
+            103: 'Electronics',
+            104: 'Grocery',
+            105: 'Home Appliances'
+        }
+        df['category'] = df['product_id'].map(product_map)
+        logger.info("✅ Category mapping completed.")
+    else:
+        logger.info("📦 'category' column already present.")
+
+    # Extract month
+    df['month'] = df['sale_date'].dt.month
+    logger.info("📆 Extracted 'month' from 'sale_date'.")
+
+    # Create pivot
+    logger.info("📊 Creating pivot table...")
+    pivot_df = df.pivot_table(
+        index='category',
+        columns='month',
+        values='sale_amount',
+        aggfunc='sum',
+        fill_value=0
+    )
+
+    # Format pivoted columns
+    pivot_df.columns = [f"Month_{m}" for m in pivot_df.columns]
+    pivot_df.reset_index(inplace=True)
+
+    logger.info(f"✅ Pivot table created with shape: {pivot_df.shape}")
+    return pivot_df
