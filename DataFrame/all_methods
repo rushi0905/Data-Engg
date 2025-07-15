@@ -1,0 +1,114 @@
+import pandas as pd
+
+# Sample DataFrame
+data = {
+    'Destination': ['Rishikesh', 'Haridwar', 'Dehradun'],
+    'Stay (Nights)': [2, 3, 1],
+    'Food Cost (₹)': [300, 250, 275]
+}
+
+df = pd.DataFrame(data)
+
+# 🔍 Basic Exploration
+print("== Columns ==")
+print(df.columns)
+
+print("== Index ==")
+print(df.index)
+
+print("== Shape ==")
+print(df.shape)
+
+print("== Data Types ==")
+print(df.dtypes)
+
+print("== Head (first 5 rows) ==")
+print(df.head())
+
+print("== Tail (last 2 rows) ==")
+print(df.tail(2))
+
+print("== Random Sample (1 row) ==")
+print(df.sample(1))
+
+print("== DataFrame Info ==")
+df.info()
+
+print("== Description of numeric columns ==")
+print(df.describe())
+
+# 📎 Accessing Data
+print("== Single Column: Destination ==")
+print(df['Destination'])
+
+print("== Multiple Columns: Destination & Food Cost ==")
+print(df[['Destination', 'Food Cost (₹)']])
+
+print("== Row by Index (loc) ==")
+print(df.loc[1])
+
+print("== Row by Position (iloc) ==")
+print(df.iloc[0])
+
+print("== Single Value (at) ==")
+print(df.at[2, 'Food Cost (₹)'])
+
+print("== Single Value (iat) ==")
+print(df.iat[0, 1])
+
+# 🧮 Aggregation & Statistics
+print("== Mean Food Cost ==")
+print(df['Food Cost (₹)'].mean())
+
+print("== Total Stay Nights ==")
+print(df['Stay (Nights)'].sum())
+
+print("== Min & Max Food Cost ==")
+print(df['Food Cost (₹)'].min())
+print(df['Food Cost (₹)'].max())
+
+print("== Frequency of Destinations ==")
+print(df['Destination'].value_counts())
+
+print("== Grouped Mean by Destination ==")
+print(df.groupby('Destination').mean())
+
+print("== Aggregated Summary ==")
+print(df.agg({
+    'Stay (Nights)': ['sum', 'mean'],
+    'Food Cost (₹)': ['min', 'max', 'mean']
+}))
+
+# ✂️ Manipulating Data
+print("== Drop 'Food Cost (₹)' Column ==")
+print(df.drop('Food Cost (₹)', axis=1))
+
+print("== Rename 'Stay (Nights)' Column to 'Nights Stayed' ==")
+print(df.rename(columns={'Stay (Nights)': 'Nights Stayed'}))
+
+print("== Sort by 'Stay (Nights)' ==")
+print(df.sort_values('Stay (Nights)'))
+
+print("== Fill NA with 0 ==")
+print(df.fillna(0))
+
+print("== Drop rows with NA ==")
+print(df.dropna())
+
+print("== Convert 'Stay (Nights)' to Float ==")
+print(df.astype({'Stay (Nights)': float}))
+
+# Adding new column using apply()
+df['Adjusted Cost'] = df['Food Cost (₹)'].apply(lambda x: x * 1.18)
+print("== Apply Custom Transformation (Adjusted Cost) ==")
+print(df)
+
+print("== Rounded Numeric Columns ==")
+print(df.round(0))
+
+# 💾 Exporting (commented to avoid file creation)
+# print("== Export to CSV ==")
+# df.to_csv("trip.csv", index=False)
+
+# print("== Export to Excel ==")
+# df.to_excel("trip.xlsx", index=False)

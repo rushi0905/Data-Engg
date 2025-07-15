@@ -30,3 +30,5 @@ df2 = pd.DataFrame({'id': [1, 2, 3], 'age': [25, 30, 35]})
 
 merged_df = pd.merge(df1, df2, on='id', how='right')
 print(merged_df)
+
+dir(merged_df)

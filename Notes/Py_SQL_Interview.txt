@@ -14,7 +14,7 @@ pandas - all
 1. *What is Python?*
 --> Python is programming language and also folllows the oops concept.
 Some feature of python as below : 
-1.Object oriented
+1.Object-oriented
 2.Easy to understand
 3.Interpreted language
 4.Simple syntax
