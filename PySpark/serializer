@@ -1,0 +1,5 @@
+from pyspark import SparkContext
+from pyspark.serializers import MarshalSerializer
+sc = SparkContext("local", "Marshal Serialization", serializer = MarshalSerializer())    #Initialize spark context and serializer
+print(sc.parallelize(list(range(1000))).map(lambda x: 3 * x).take(5))
+sc.stop()

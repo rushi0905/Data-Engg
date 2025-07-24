@@ -1,0 +1,12 @@
+from pyspark.sql.functions import broadcast
+from pyspark.sql import SparkSession
+
+# Large DataFrame
+spark = SparkSession.builder.appName("broadcast example").getOrCreate()
+sales_df = spark.read.csv("sales.csv", header=True, inferSchema=True)
+
+# Small lookup DataFrame
+region_df = spark.read.csv("region.csv", header=True, inferSchema=True)
+
+# Broadcast join
+result_df = sales_df.join(broadcast(region_df), "region_id")

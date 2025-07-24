@@ -60,3 +60,51 @@ ALTER TABLE extended_sales_data
 ADD COLUMN latitude VARCHAR(20),
 ADD COLUMN longitude VARCHAR(20),
 ADD COLUMN location_description TEXT;
+
+----------------------------------------------------------
+-- use case 12
+
+CREATE TABLE customer_segments (
+    customer_id INT PRIMARY KEY,
+    recency INT,
+    frequency INT,
+    monetary DECIMAL(10,2),
+    segment VARCHAR(20)
+);
+
+select * from customer_segments;
+
+show tables;
+
+----------------------------------------------------------
+-- use case 13
+
+CREATE TABLE employee_hierarchy_data (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(100),
+    manager_id INT
+);
+INSERT INTO employee_hierarchy_data (emp_id, emp_name, manager_id)
+VALUES (1, 'CEO', NULL),
+    (2, 'VP Marketing', 1),
+    (3, 'VP Sales', 1),
+    (4, 'Sales Manager', 3),
+    (5, 'Sales Executive', 4),
+    (6, 'Marketing Manager', 2),
+    (7, 'Marketing Executive', 6);
+
+rename table employee_hierarchy_data to employee_hierarchy;
+
+select * from employee_hierarchy;
+
+----------------------------------------------------------
+-- use case 13
+
+CREATE TABLE batch_sales_summary (
+    year INT,
+    month INT,
+    region VARCHAR(50),
+    category VARCHAR(50),
+    total_sales DECIMAL(10,2),
+    total_quantity INT
+);

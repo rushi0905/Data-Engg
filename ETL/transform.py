@@ -105,3 +105,47 @@ def transform_to_pivot(df):
 
     logger.info(f"✅ Pivot table created with shape: {pivot_df.shape}")
     return pivot_df
+
+# use case 12
+
+def rfm_transform(df):
+    """Calculate Recency, Frequency, Monetary values per customer."""
+    today = datetime.today()
+    df['sale_date'] = pd.to_datetime(df['sale_date'])  # Ensure proper date format
+
+    rfm = df.groupby('customer_id').agg({
+        'sale_date': lambda x: (today - x.max()).days,  # Recency
+        'order_id': 'count',                            # Frequency
+        'sale_amount': 'sum'                            # Monetary
+    }).reset_index()
+
+    rfm.columns = ['customer_id', 'recency', 'frequency', 'monetary']
+
+    # Segment based on monetary value (example: 3 buckets)
+    rfm['segment'] = pd.qcut(rfm['monetary'], 3, labels=['Low', 'Medium', 'High'])
+
+    return rfm    
+
+# use case 14
+
+def transform_batch_data(df):
+    # Clean and convert types
+    df['sale_amount'] = df['sale_amount'].astype(float)
+    df['sale_date'] = pd.to_datetime(df['sale_date'])
+
+    # Add time features
+    df['year'] = df['sale_date'].dt.year
+    df['month'] = df['sale_date'].dt.month
+
+    # Aggregation
+    summary = df.groupby(['year', 'month', 'region', 'category']).agg({
+        'sale_amount': 'sum',
+        'quantity': 'sum'
+    }).reset_index()
+
+    summary.rename(columns={
+        'sale_amount': 'total_sales',
+        'quantity': 'total_quantity'
+    }, inplace=True)
+
+    return summary 

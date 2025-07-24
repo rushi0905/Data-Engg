@@ -7,9 +7,9 @@ import argparse
 # Add project root to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from extract import extract_data
-from transform import transform_data, transform_to_pivot
-from load import enrich_region_data, load_data, load_pivot_to_csv, load_extended_sales_data, setup_indexes
+from extract import extract_data, extract_employee_tree, extract_sales_batch_data
+from transform import rfm_transform, transform_batch_data, transform_data, transform_to_pivot
+from load import enrich_region_data, load_batch_summary, load_customer_segments, load_data, load_hierarchy_to_csv, load_pivot_to_csv, load_extended_sales_data, setup_indexes
 
 # Configure logging
 logging.basicConfig(
@@ -81,6 +81,39 @@ def run_enrichment():
         logging.error(f"❌ Enrichment pipeline failed: {str(e)}")
 
 
+def segment_customers():
+    """Use Case 12: Segment customers using RFM model."""
+    try:
+        df = extract_data("E:\JVM DE\Data-Engg-1\Raw_Data\extended_sales_data.csv")
+        rfm_df = rfm_transform(df)
+        load_customer_segments(rfm_df)
+        logging.info("✅ Customer segmentation completed.")
+    except Exception as e:
+        logging.error(f"❌ Customer segmentation failed: {str(e)}")
+
+def generate_hierarchy_report():
+    """Use Case 13: Employee hierarchy report using recursive SQL"""
+    try:
+        df = extract_employee_tree()
+        load_hierarchy_to_csv(df)
+        logging.info("✅ Hierarchy report generated successfully.")
+    except Exception as e:
+        logging.error(f"❌ Hierarchy report generation failed: {str(e)}")
+
+
+def run_batch_etl():
+    """Use Case 14: Batch Data Transformation for Analytics"""
+    try:
+        df = extract_sales_batch_data()
+        transformed_df = transform_batch_data(df)
+        load_batch_summary(transformed_df)
+
+        logging.info("✅ Batch ETL completed successfully.")
+    except Exception as e:
+        logging.error(f"❌ Batch ETL failed: {str(e)}")
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run specific ETL use case.")
     parser.add_argument('--usecase', required=True, help='Use case name to run')
@@ -91,7 +124,10 @@ if __name__ == "__main__":
         'pivot': pivot_etl,
         'extended_load': extended_load_etl,
         'index': run_indexing,
-        'enrich': run_enrichment 
+        'enrich': run_enrichment,
+        'segment': segment_customers,
+        'hierarchy': generate_hierarchy_report,
+        'batch': run_batch_etl
     }
 
     if args.usecase not in USE_CASES:

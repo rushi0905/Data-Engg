@@ -1,0 +1,10 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import sum
+
+spark = SparkSession.builder.appName("PivotExample").getOrCreate()
+
+data = [("Alice", "East", 100), ("Bob", "West", 200), ("Alice", "West", 150)]
+df = spark.createDataFrame(data, ["salesperson", "region", "sales"])
+
+pivot_df = df.groupBy("salesperson").pivot("region").agg(sum("sales"))
+pivot_df.show()

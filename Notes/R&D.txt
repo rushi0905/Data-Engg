@@ -78,6 +78,8 @@ etl_project/
 ├── run_etl.py                  # Main driver script
 └── README.md
 
+#############################################################################################################################
+
 🔍 WHERE Clause
 - Purpose: Filters individual rows before any grouping or aggregation.
 - Used with: Regular columns (not aggregate functions).
@@ -114,3 +116,49 @@ HAVING SUM(sales) > 50000;
 This order explains why HAVING can use aggregate functions but WHERE cannot.
 
 #############################################################################################################################
+
+
+The COALESCE operator is a super handy SQL function when you're dealing with missing or NULL values. It returns the first non-null value from a list of arguments
+
+#############################################################################################################################
+
+Transformation operations are map, filter, flatMap, groupByKey, reduceByKey, join, union, sortByKey, distinct, sample, mapPartitions, and aggregateByKey. These functions transform RDDs by applying computations in a distributed manner across a cluster of machines and return a new RDD
+
+RDD actions in PySpark trigger computations and return results to the Spark driver. Key actions include collect, count, take, reduce, foreach, first, takeOrdered, takeSample, countByKey, saveAsTextFile, saveAsSequenceFile, saveAsObjectFile, foreachPartition, collectAsMap, aggregate, and fold.
+
+#############################################################################################################################
+
+What are PySpark serializers?
+The serialization process is used to conduct performance tuning on Spark. The data sent or received over the network to the disk or memory should be persisted. PySpark supports serializers for this purpose. It supports two types of serializers, they are:
+
+PickleSerializer: This serializes objects using Python’s PickleSerializer (class pyspark.PickleSerializer). This supports almost every Python object.
+MarshalSerializer: This performs serialization of objects. We can use it by using class pyspark.MarshalSerializer. This serializer is faster than the PickleSerializer but it supports only limited types.
+Consider an example of serialization which makes use of MarshalSerializer:
+
+# --serializing.py----
+from pyspark.context import SparkContext
+from pyspark.serializers import MarshalSerializer
+sc = SparkContext("local", "Marshal Serialization", serializer = MarshalSerializer())    #Initialize spark context and serializer
+print(sc.parallelize(list(range(1000))).map(lambda x: 3 * x).take(5))
+sc.stop()
+
+#############################################################################################################################
+
+✅ What is PySpark Streaming?
+PySpark Streaming is a component of Apache Spark that enables real-time stream processing of live data streams using the Python API.
+
+Instead of processing data in batches (like traditional ETL), it processes incoming data in small time intervals (called micro-batches).
+
+#############################################################################################################################
+
+🔍 What is Broadcast in PySpark?
+In PySpark, a broadcast variable is a read-only shared variable that is cached on each worker node, instead of being sent with tasks. It's used to efficiently distribute small datasets across all worker nodes to avoid shuffling them multiple times.
+
+💡 Why is it used?
+When you perform joins between:
+
+a large DataFrame (e.g. sales data with millions of rows)
+
+and a small lookup table (e.g. country code mapping with 5 rows),
+
+broadcasting the small table avoids data shuffling and improves performance significantly.

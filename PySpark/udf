@@ -1,0 +1,14 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+
+
+spark = SparkSession.builder.appName("udf example").getOrCreate()
+data = [('Rushi',5000000),('Amir',4500000),('Jay',15000000)]
+columns = ['name','salary']
+df = spark.createDataFrame(data,columns)
+def classsify_salary(salary):
+    return "high" if salary > 5000000 else "low"
+classsify_udf = udf(classsify_salary, StringType())
+df_with_class = df.withcolumn('salary_class',classsify_udf(df['salary']))
+df_with_class.show()

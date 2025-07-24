@@ -1,0 +1,20 @@
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("Remove Duplicates").getOrCreate()
+
+# Sample data
+data = [
+    (1, "Rushi", "India"),
+    (2, "Aamir", "India"),
+    (1, "Rushi", "India"),   # duplicate
+    (3, "Jayesh", "UK"),
+]
+
+columns = ["id", "name", "country"]
+
+df = spark.createDataFrame(data, columns)
+
+# Remove full row duplicates
+df_no_dupes = df.dropDuplicates()
+
+df_no_dupes.show()

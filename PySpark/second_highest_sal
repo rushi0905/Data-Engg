@@ -1,0 +1,17 @@
+from pyspark.sql import SparkSession
+spark = (
+	SparkSession.builder
+	.appName('second_highest')
+	.getOrCreate()
+)
+data = [("Alice", 50000), ("Bob", 60000), ("Cathy", 70000), ("David", 60000)]
+columns = ['name','salary']
+df = spark.createDataFrame(data,columns)
+df.show()
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number, col
+windowspec = Window.partitionBy("department").orderBy(col('salary').desc())
+df_with_rank = df.withColumn('rank',row_number().over(windowspec))
+second_highest = df_with_rank.filter(df_with_rank['rank']==2)
+second_highest.show()

@@ -177,3 +177,49 @@ def enrich_region_data():
         logging.error(f"❌ Enrichment failed: {e}")
         raise
 
+#use case 12
+def load_customer_segments(rfm_df):
+    try:
+        engine = create_engine(db_url)
+        with engine.begin() as conn:
+            for _, row in rfm_df.iterrows():
+                conn.execute(text("""
+                    INSERT INTO customer_segments (
+                        customer_id, recency, frequency, monetary, segment
+                    ) VALUES (
+                        :customer_id, :recency, :frequency, :monetary, :segment
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        recency = VALUES(recency),
+                        frequency = VALUES(frequency),
+                        monetary = VALUES(monetary),
+                        segment = VALUES(segment)
+                """), {
+                    'customer_id': int(row['customer_id']),
+                    'recency': int(row['recency']),
+                    'frequency': int(row['frequency']),
+                    'monetary': float(row['monetary']),
+                    'segment': str(row['segment'])
+                })
+        logging.info("✅ Customer segments loaded successfully.")
+    except Exception as e:
+        logging.error(f"❌ Customer segment load failed: {e}")
+        raise
+
+
+# use case 13
+def load_hierarchy_to_csv(df):
+    output_dir = "artifacts"  # ✅ Use correct folder
+    os.makedirs(output_dir, exist_ok=True)  # Just in case it's missing
+    output_path = os.path.join(output_dir, "employee_hierarchy.csv")
+    df.to_csv(output_path, index=False)
+
+#use case 14
+def load_batch_summary(df):
+    try:
+        engine = create_engine(db_url)
+        df.to_sql('batch_sales_summary', con=engine, index=False, if_exists='append')
+        logging.info("✅ Batch summary data loaded successfully.")
+    except Exception as e:
+        logging.error(f"❌ Failed to load batch summary data: {e}")
+

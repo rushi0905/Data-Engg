@@ -1,0 +1,87 @@
+# 🌟 LIST METHODS
+print("=== List Methods ===")
+fruits = ['apple', 'banana', 'cherry']
+print("Original list:", fruits)
+
+fruits.append('mango')
+print("After append:", fruits)
+
+fruits.insert(1, 'orange')
+print("After insert:", fruits)
+
+fruits.extend(['grape'])
+print("After extend:", fruits)
+
+fruits.remove('banana')
+print("After remove:", fruits)
+
+popped_item = fruits.pop(2)
+print("After pop (index 2):", fruits, "| Popped item:", popped_item)
+
+fruits.insert(4,'cherry')
+print("After insert:", fruits)
+
+copy_fruits = fruits.copy()
+print("Copied list:", copy_fruits)
+
+count_apple = fruits.count('apple')
+print("Count of 'apple':", count_apple)
+
+index_cherry = fruits.index('cherry')
+print("Index of 'cherry':", index_cherry)
+
+fruits.sort()
+print("After sort:", fruits)
+
+fruits.reverse()
+print("After reverse:", fruits)
+
+fruits.clear()
+print("After clear:", fruits)
+
+# 🔗 SET METHODS
+print("\n=== Set Methods ===")
+nums = {1, 2, 3, 4}
+print("Original set:", nums)
+
+nums.add(5)
+print("After add:", nums)
+
+nums.discard(2)
+print("After discard 2:", nums)
+
+nums.remove(1)
+print("After remove 1:", nums)
+
+random_popped = nums.pop()
+print("After pop:", nums, "| Popped item:", random_popped)
+
+nums.update({10, 11})
+print("After update with {10, 11}:", nums)
+
+copy_nums = nums.copy()
+print("Copied set:", copy_nums)
+
+union_set = nums.union({20, 21})
+print("Union with {20, 21}:", union_set)
+
+intersection_set = nums.intersection({3, 10})
+print("Intersection with {3, 10}:", intersection_set)
+
+difference_set = nums.difference({3, 10})
+print("Difference with {3, 10}:", difference_set)
+
+sym_diff_set = nums.symmetric_difference({10, 20})
+print("Symmetric difference with {10, 20}:", sym_diff_set)
+
+subset_check = nums.issubset({3, 4, 5, 10, 11})
+print("Is subset of {3,4,5,10,11}:", subset_check)
+
+superset_check = nums.issuperset({10})
+print("Is superset of {10}:", superset_check)
+
+disjoint_check = nums.isdisjoint({99})
+print("Is disjoint from {99}:", disjoint_check)
+
+nums.clear()
+print("After clear:", nums)

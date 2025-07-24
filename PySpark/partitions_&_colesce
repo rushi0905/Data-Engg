@@ -1,0 +1,20 @@
+from pyspark.sql import SparkSession
+
+# Read CSV with default partitions
+spark = SparkSession.builder.appName('partition').getOrCreate()
+df = spark.read.csv("E:\JVM DE\Data-Engg-1\Raw_Data\extended_sales_data.csv", header=True)
+
+# Check number of partitions
+print(df.rdd.getNumPartitions())   # e.g., 4
+
+# Repartition
+df2 = df.repartition(8)  # Creates 8 partitions
+df2.show()
+
+# Coalesce (reduce partitions, more efficient than repartition for shrinking)
+df3 = df2.coalesce(2)
+# df3.show()
+df3.rdd.mapPartitionsWithIndex(
+    lambda idx, it: [(idx, list(it))], preservesPartitioning=True
+).collect()
+# df3.show()

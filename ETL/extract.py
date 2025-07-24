@@ -2,6 +2,9 @@
 import pandas as pd
 from alerts import send_email
 import logging
+from sqlalchemy import create_engine
+from config import db_url
+
 
 # Configure logging
 logging.basicConfig(
@@ -46,3 +49,42 @@ def extract_data(path="E:\JVM DE\Data-Engg-1\Raw_Data\extended_sales_data.csv"):
     except Exception as e:
         logging.error(f"❌ Extract failed: {e}")
         raise
+
+# use case 13
+
+def extract_employee_tree():
+    query = """
+        WITH RECURSIVE employee_tree AS (
+            SELECT
+                emp_id,
+                emp_name,
+                manager_id,
+                1 AS level,
+                CAST(emp_name AS CHAR(1000)) AS path
+            FROM employee_hierarchy
+            WHERE manager_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                e.emp_id,
+                e.emp_name,
+                e.manager_id,
+                et.level + 1,
+                CONCAT(et.path, ' > ', e.emp_name)
+            FROM employee_hierarchy e
+            JOIN employee_tree et ON e.manager_id = et.emp_id
+        )
+        SELECT * FROM employee_tree
+        ORDER BY path;
+    """
+   
+    engine = create_engine(db_url)
+    return pd.read_sql(query, con=engine)
+
+
+# use case 14
+
+def extract_sales_batch_data(file_path=r'E:\JVM DE\Data-Engg-1\Raw_Data\new_sales_data.csv'):
+    df = pd.read_csv(file_path)  # Removed parse_dates because sale_date doesn't exist
+    return df

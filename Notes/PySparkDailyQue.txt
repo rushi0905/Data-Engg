@@ -193,7 +193,7 @@ Characteristic :-
 4.Lazy evaluation
 5.Integration with spark sql
 
-Crestion of PySpark dataframe from various datasource including :-
+Creation of PySpark dataframe from various datasource including :-
 1.Existing RDDs
 2.Structured datafiles
 3.External databases
@@ -288,8 +288,7 @@ Driver,Cluster Manager, and Executors
 
 7.What PySpark DAGScheduler?
 -->
-The DAGScheduler in PySpark is a core component of the Spark execution engine that is responsible for building and scheduling 
-execution stages as a Directed Acyclic Graph (DAG) of stages and tasks.
+The DAGScheduler in PySpark is a core component of the Spark execution engine that is responsible for building and scheduling execution stages as a Directed Acyclic Graph (DAG) of stages and tasks.
 
 --------------------------------------------------------------------------------------------------------------------------
 
@@ -446,7 +445,7 @@ second_highest.show()
 To inner join two DataFrames in PySpark, use the .join() method and specify the join column(s) and join type as "inner" (which is the default).
 
 result = df1.join(df2, on="id", how="inner")
-
+# emp_dept_df = empDF.join(deptDF,empDF.empdept_id == deptDF.dept_id,"inner").show(truncate=False)
 
 5.joins in pyspark and write all query of all joins in pyspark?
 -->
@@ -503,7 +502,7 @@ Narrow :
 Ex : map(), filter(), flatMap()
 
 Wide :
-1.it requires data from multiple partitiotons to createa single output partition
+1.it requires data from multiple partitiotons to create a single output partition
 2.Data shuffle between node.
 3.Generally slower due to data dsitribution.
 Ex : groupByKey(),reduceByKey(),join()

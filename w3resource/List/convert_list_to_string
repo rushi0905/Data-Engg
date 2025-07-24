@@ -1,0 +1,3 @@
+lst = ['a','s','d','r']
+str = ''.join(lst)
+print(str)

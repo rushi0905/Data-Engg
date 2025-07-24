@@ -1,0 +1,45 @@
+from pyspark.sql import SparkSession
+
+# 1. Using SparkContext.parallelize() + toDF()
+spark = SparkSession.builder.getOrCreate()
+data = [(1, "Alice"), (2, "Bob")]
+rdd = spark.sparkContext.parallelize(data)
+df = rdd.toDF(["id", "name"])
+df.show()
+
+# 2. Using SparkSession.createDataFrame() with list of tuples
+data = [(1, "Alice"), (2, "Bob")]
+df = spark.createDataFrame(data, ["id", "name"])
+df.show()
+
+# 3. Using createDataFrame() with list of dicts
+data = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
+df = spark.createDataFrame(data)
+df.show()
+
+# 4. Using spark.read API (from CSV, JSON, etc.)
+df = spark.read.csv("path/to/file.csv", header=True, inferSchema=True)
+df.show()
+
+
+# 5. Using spark.sql() from a temporary view
+data = [(1, "Alice"), (2, "Bob")]
+df = spark.createDataFrame(data, ["id", "name"])
+df.createOrReplaceTempView("people")
+sql_df = spark.sql("SELECT * FROM people WHERE id = 1")
+sql_df.show()
+
+# 6. Using an existing DataFrame (copy or transform)
+new_df = df.select("name")  # subset of existing df
+new_df.show()
+
+# 7. Converting RDD to DataFrame
+rdd = spark.sparkContext.parallelize([(1, "Alice"), (2, "Bob")])
+df = rdd.toDF(["id", "name"])
+df.show()
+
+# 8. Converting Pandas DataFrame to Spark DataFrame
+import pandas as pd
+pdf = pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})
+df = spark.createDataFrame(pdf)
+df.show()

@@ -1,0 +1,11 @@
+#transformation
+from pyspark import SparkContext
+sc = SparkContext("local","transformation demo")
+words_list = sc.parallelize(["pyspark","question","interview","at","interviewbit"])
+filterd_words = words_list.filter(lambda X : 'interview' in X)
+filtered = filterd_words.collect()
+print(filtered)
+
+#action
+count = words_list.count()
+print("count of element in RDD is : ",count)
