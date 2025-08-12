@@ -1,0 +1,61 @@
+print('create a new set:')
+x= set()
+print(x)
+print(type(x))
+print(type(x))
+print("\nCreate a non-empty set:")
+n = set([0,1,2,3,4])
+print(n)
+# create a set 'a' using a set literal with element 1,2,3,foo,bar
+a = {1,2,3,'foo','bar'}
+print(type(a))
+print(a)
+
+
+num_set = set([0,2,3,4,5])
+for n in num_set:
+    print(n,end='')
+
+#Print two newline characters for seperation
+char_set = set("w3resource")
+for val in char_set:
+    print(val,end='')
+
+
+# Create a set 'char_set' by converting the string
+char_set = set('w3resource')
+char_set = list(char_set)
+for id in range(len(char_set)):
+    print(char_set[id],end='')
+
+
+color_set = {'red','green','yellow'}
+color_set1 = color_set.update(['blue'])
+print(color_set)
+
+color_set.add('black')
+print(color_set)
+color_set.pop()
+print(color_set)
+
+def remove_al_ele(num_set):
+    while num_set:
+        num_set.pop()
+    return num_set
+num_set = set([1,2,34,56])
+print(num_set)
+print(remove_al_ele(num_set))
+
+print(num_set)
+num_set.discard(2)
+print(num_set)
+num_set.discard(56)
+print(num_set)
+
+setx = set(['green','blue'])
+sety = set(['blue','yellow'])
+setz = setx & sety
+setd = setx.union(sety)
+setv = setx.difference(sety)
+
+print(setd)

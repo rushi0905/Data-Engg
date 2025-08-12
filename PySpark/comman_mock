@@ -1,0 +1,15 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+
+spark = SparkSession.builder.appName('Question').getOrCreate()
+customer_df = spark.read.format('csv').option(header=True).load("Path/to/csv")
+order_df = spark.read.format('csv').option(header=True).load("Path/to/csv")
+
+order_df = order_df.withColumn('product_quantity',col('product_quantity').cast('int'))\
+                    .withColumn('product_price',col('product_price').cast('flaot'))\
+                    .withColumn('ordered_date',col('ordered_date','yyyy-mm-dd'))
+
+# Find cust_id,cust_name and their order count
+
+order_count_df = order_df.groupBy('cust_id').agg(count_distinct('order_id').alias('order_count'))
+result1 = customer_df.join

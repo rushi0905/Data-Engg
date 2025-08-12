@@ -1,0 +1,49 @@
+setn = {3,4,5,65,2,3}
+print(type(setn))
+print(max(setn))
+print(min(setn))
+print(len(setn))
+
+nums = {1,23,4,5,21}
+print(1 in nums)
+print(23 in nums)
+print(3 in nums)
+print(9 not in nums)
+
+x = {12,32,2,3,4}
+y = {4,5,6,70}
+z = {8}
+
+# Use the 'isdisjoint()' method to check if 'x' and 'y' have no comman value
+print(x.isdisjoint(y))
+print(z.isdisjoint(x))
+print(y.isdisjoint(z))
+
+def compare_sets(s1,s2):
+    for i in s1:
+        if i in s2:
+            return False
+    return True
+x = {1,2,3,4,5}
+y = {2,3,4,5,6}
+z = {34}
+
+print(compare_sets(x,y))
+print(compare_sets(y,z))
+
+supra =x.issuperset(y)
+print(supra)
+
+sn1 = {1,2,3,4,5}
+sn2 = {4,5,6,6,7}
+print(sn1.difference(sn2))
+print(sn1 - sn2)
+print(sn2 - sn1)
+
+# remove intersection from set
+
+for i in sn1 & sn2:
+    sn1.remove(i)
+print('sn1',sn1)
+print('sn2',sn2)
+

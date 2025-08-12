@@ -1,0 +1,5 @@
+from collections import OrderedDict
+def remove_duplicate(lst):
+    return list(OrderedDict.fromkeys(lst))
+nums =[1,2,3,4,5,53,3,3]
+print(remove_duplicate(nums))

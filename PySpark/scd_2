@@ -1,0 +1,29 @@
+from pyspark.sql.functions import col, current_date, lit
+from pyspark.sql import SparkSession
+# Input DataFrames
+# 'existing_df': current state in target (dimension table)
+spark = SparkSession.builder.appName('scd2').getOrCreate()
+existing_df = spark.createDataFrame([
+    (1, "Alice", "NY"),
+    (2, "Bob", "LA")
+], ["customer_id", "name", "city"])
+# 'new_df': latest incoming data
+# Identify changed records
+new_df = spark.createDataFrame([
+    (1, "Alicia", "NY"),  # name changed from Alice to Alicia
+], ["customer_id", "name", "city"])
+
+changed = existing_df.join(new_df, "customer_id") \
+    .where(existing_df["name"] != new_df["name"])
+
+# Mark old records as not current
+expired = changed.withColumn("current", lit(False)) \
+    .withColumn("end_date", current_date())
+
+# Append new (changed) records with current flag
+new_version = changed.withColumn("current", lit(True)) \
+    .withColumn("start_date", current_date()) \
+    .withColumn("end_date", lit(None).cast("date"))
+
+# Combine all: untouched + expired + new_version
+result_df = existing_df.subtract(changed).unionByName(expired).unionByName(new_version)

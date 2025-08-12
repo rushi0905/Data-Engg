@@ -223,3 +223,20 @@ def load_batch_summary(df):
     except Exception as e:
         logging.error(f"❌ Failed to load batch summary data: {e}")
 
+#use case 15
+def load_data(df):
+    try:
+        if df.empty:
+            logging.info("⚠️ No data to load.")
+            return
+
+        engine = create_engine(db_url)
+
+        # Use REPLACE INTO or ON DUPLICATE KEY UPDATE for UPSERT
+        df.to_sql('products', con=engine, if_exists='append', index=False, method='multi')
+
+        logging.info(f"✅ Loaded {len(df)} rows to destination DB.")
+    except Exception as e:
+        logging.error("❌ Load step failed", exc_info=True)
+        send_email("Load step failed", str(e))
+

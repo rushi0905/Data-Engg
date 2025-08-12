@@ -1,0 +1,17 @@
+from pyspark.sql.functions import col
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName('scd3').getOrCreate()
+existing_df = spark.createDataFrame([
+    (1, "Aiswarya", "Newtown", "Saltlake"),
+], ["customer_id", "name", "current_address", "previous_address"])
+
+new_df = spark.createDataFrame([
+    (1, "Aiswarya", "Saltlake"),  # address changed
+], ["customer_id", "name", "current_address"])
+
+# Identify and update changed addresses
+joined = existing_df.join(new_df, "customer_id")
+updated = joined.withColumn("previous_address", col("current_address")) \
+    .withColumn("current_address", col("new_df.current_address"))
+updated.show()

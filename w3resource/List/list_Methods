@@ -1,0 +1,14 @@
+| Method               | Description                                                  | Example                    |
+| -------------------- | ------------------------------------------------------------ | -------------------------- |
+| `append(x)`          | Adds an element to the end of the list                       | `lst.append(10)`           |
+| `extend(iter)`       | Extends list by appending all elements from the iterable     | `lst.extend([4, 5])`       |
+| `insert(i, x)`       | Inserts an item at a specific position                       | `lst.insert(1, 20)`        |
+| `remove(x)`          | Removes the first item with the value `x`                    | `lst.remove(10)`           |
+| `pop([i])`           | Removes and returns item at index `i` (or last if not given) | `lst.pop(2)` / `lst.pop()` |
+| `clear()`            | Removes all items from the list                              | `lst.clear()`              |
+| `index(x)`           | Returns the index of the first occurrence of `x`             | `lst.index(5)`             |
+| `count(x)`           | Returns the count of `x` in the list                         | `lst.count(3)`             |
+| `sort()`             | Sorts the list in ascending order (in-place)                 | `lst.sort()`               |
+| `sort(reverse=True)` | Sorts the list in descending order                           | `lst.sort(reverse=True)`   |
+| `reverse()`          | Reverses the list in-place                                   | `lst.reverse()`            |
+| `copy()`             | Returns a shallow copy of the list                           | `new_list = lst.copy()`    |

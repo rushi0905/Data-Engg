@@ -112,6 +112,18 @@ def run_batch_etl():
     except Exception as e:
         logging.error(f"❌ Batch ETL failed: {str(e)}")
 
+def run_staging_etl():
+    try:
+        # Get last sync time (could be from a file or metadata table)
+        last_sync_time = "2025-07-24 00:00:00"  # placeholder
+
+        logging.info("🚀 Starting ETL for Use Case 15")
+        df = extract_data(last_sync_time)
+        df = transform_data(df)
+        load_data(df)
+        logging.info("✅ ETL completed successfully.")
+    except Exception as e:
+        logging.error("❌ ETL failed", exc_info=True)
 
 
 if __name__ == "__main__":
@@ -127,7 +139,8 @@ if __name__ == "__main__":
         'enrich': run_enrichment,
         'segment': segment_customers,
         'hierarchy': generate_hierarchy_report,
-        'batch': run_batch_etl
+        'batch': run_batch_etl,
+        'staging': run_staging_etl
     }
 
     if args.usecase not in USE_CASES:

@@ -1,0 +1,28 @@
+# Create a tuple containing a sequence of numbers
+tuplex = 2, 4, 5, 6, 2, 3, 4, 4, 7
+# Print the contents of the 'tuplex' tuple
+print(tuplex)
+
+# Count the number of times the value 4 appears in the 'tuplex' tuple
+count = tuplex.count(4)
+# Print the count of how many times 4 appears
+print(count) 
+
+
+from collections import Counter
+
+# Example tuple
+tup = (1, 2, 3, 4, 2, 5, 6, 1, 7, 2)
+
+# Count the occurrences of each item
+counter = Counter(tup)
+
+# Find items with a count greater than 1 (repeated items)
+repeats = [item for item, count in counter.items() if count > 1]
+print("Repeated items:", repeats)
+
+print(1 in tup)
+
+listx = list(tup)
+listx.remove(1)
+print(listx)

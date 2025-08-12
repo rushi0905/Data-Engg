@@ -149,3 +149,14 @@ def transform_batch_data(df):
     }, inplace=True)
 
     return summary 
+
+# use case 15
+def transform_data(df):
+    try:
+        # Placeholder for transformation logic
+        df = df.drop_duplicates(subset=['primary_key_column'])
+        logging.info("✅ Transformation completed.")
+        return df
+    except Exception as e:
+        logging.error("❌ Transform step failed", exc_info=True)
+        return df

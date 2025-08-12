@@ -1,0 +1,7 @@
+def get_first_and_last_char(str):
+    if len(str)<2:
+        return ''
+    return str[0:2]+str[-2:]
+print(get_first_and_last_char('google.com'))
+print(get_first_and_last_char('w3'))
+print(get_first_and_last_char('w'))

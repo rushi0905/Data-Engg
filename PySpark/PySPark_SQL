@@ -1,0 +1,7 @@
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("SQLExample").getOrCreate()
+df = spark.read.csv("data.csv", header=True, inferSchema=True)
+df.createOrReplaceTempView("my_table")
+result = spark.sql("SELECT name, salary FROM my_table WHERE salary > 50000")
+result.show()

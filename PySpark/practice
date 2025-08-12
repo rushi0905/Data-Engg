@@ -1,0 +1,79 @@
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder().appName('Practice').getOrCreate()
+df = spark.read.csv("path/to/file.csv").option(header = True).option(inferSchema = True)
+
+df_filterd = df.filter(df['column'] > value)
+
+df = df.filter(df.salary > 50000)
+df.show()
+
+from pyspark.sql import col
+from pyspark.sql.functions import curdate
+df_filterd = df.filter("cust_name =Rushikesh and cust_id = 23 and cust_spend = 4000")
+df_filterd.show()
+
+df_filterd = df.filter(
+    (col('customer_name') == 'Rushikesh') &
+    (col('customer_id') == 23) &
+    (col('spend') == 23000) &
+    (col('purchase_date') == curdate()) 
+)
+df_filterd.show()
+
+df_joined = df1.join(df2, df1['key'] == df2['key'],'inner')
+
+df = df.dropna()
+df = df.fillna(Value)
+
+# duplicate row across all column
+duplicates = df.exceptAll(df.dropduplicates())
+
+#duplicate based on specific column
+
+duplicates = df.excepAll(df.dropduplicate(['team','position']))
+
+#duplicates by group by
+duplicates = df.groupby(df.columns).count().filter("count > 1").drop('count')
+
+
+spark = SparkSession.builder.appName('joined').getOrCreate()
+
+customers = spark.createDataFrame([
+    (1, "Rushikesh", "India"),
+    (2, "Amit", "USA"),
+    (3, "Sneha", "UK")
+], ["customer_id", "customer_name", "country"])
+
+orders = spark.createDataFrame([
+    (101, 1, "Laptop"),
+    (102, 2, "Phone"),
+    (103, 4, "Tablet")  # customer_id 4 not in customers
+], ["order_id", "customer_id", "product"])
+
+df_join = customers.join(orders,on='custome_id',how='inner')
+df_join.show()
+
+spark = SparkSession.builder.appName('union').getOrCreate()
+df1 = spark.createDataFrame([
+    (1, "Rushikesh", "India"),
+    (2, "Amit", "USA")
+], ["id", "name", "country"])
+
+df2 = spark.createDataFrame([
+    (3, "Sneha", "UK"),
+    (4, "Rahul", "Canada")
+], ["id", "name", "country"])
+
+union_df = df1.union(df2)
+union_df.show()
+
+df3 = spark.createDataFrame([
+    ("UK", 5, "Priya"),
+    ("Germany", 6, "Karan")
+], ["country", "id", "name"])
+
+union_by_name = df1.unionByName(df3)
+union_by_name.show()
+
+

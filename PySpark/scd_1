@@ -1,0 +1,24 @@
+from pyspark.sql import SparkSession, functions as F
+
+# Initialize SparkSession
+spark = SparkSession.builder.getOrCreate()
+
+# Example: Update customer name
+old_df = spark.createDataFrame([
+    (1, "Alice", "NY"),
+], ["customer_id", "name", "city"])
+
+new_df = spark.createDataFrame([
+    (1, "Alicia", "NY"),  # name changed from Alice to Alicia
+], ["customer_id", "name", "city"])
+
+merged_df = old_df.alias("old").join(
+    new_df.alias("new"),
+    F.col("old.customer_id") == F.col("new.customer_id"),
+    "outer"
+).select(
+    F.coalesce("new.customer_id", "old.customer_id").alias("customer_id"),
+    F.coalesce("new.name", "old.name").alias("name"),
+    F.coalesce("new.city", "old.city").alias("city")
+)
+merged_df.show()

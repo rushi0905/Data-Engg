@@ -1,0 +1,22 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import lit, concat_ws
+
+spark = SparkSession.builder.appName("AddColumnExample").getOrCreate()
+
+data = [("James", "Smith", 3000), ("Anna", "Rose", 4100), ("Robert", "Williams", 6200)]
+columns = ["firstname", "lastname", "salary"]
+
+df = spark.createDataFrame(data, schema=columns)
+df.show()
+
+# Add constant column
+df = df.withColumn("bonus_percent", lit(0.1))
+
+# Add column based on existing column
+df = df.withColumn("bonus_amount", df.salary * 0.1)
+
+# Add concatenated column
+df = df.withColumn("fullname", concat_ws(" ", df.firstname, df.lastname))
+
+df.show()
+spark.stop()

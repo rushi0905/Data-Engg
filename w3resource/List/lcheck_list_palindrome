@@ -1,0 +1,4 @@
+def is_palindrome(lst):
+    return lst == lst[::-1]
+nums = [1,2,3,3,2,1]
+print(is_palindrome(nums))

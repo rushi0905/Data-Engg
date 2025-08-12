@@ -1,0 +1,32 @@
+| **Method**           | **Description**                                                       | **Example**                                    |
+| -------------------- | --------------------------------------------------------------------- | ---------------------------------------------- |
+| `lower()`            | Converts all characters to lowercase                                  | `"Hello".lower()` → `'hello'`                  |
+| `upper()`            | Converts all characters to uppercase                                  | `"hello".upper()` → `'HELLO'`                  |
+| `capitalize()`       | Capitalizes first character of the string                             | `"hello world".capitalize()` → `'Hello world'` |
+| `title()`            | Capitalizes the first character of each word                          | `"hello world".title()` → `'Hello World'`      |
+| `strip()`            | Removes leading and trailing whitespace                               | `" hello ".strip()` → `'hello'`                |
+| `lstrip()`           | Removes leading whitespace                                            | `" hello".lstrip()` → `'hello'`                |
+| `rstrip()`           | Removes trailing whitespace                                           | `"hello ".rstrip()` → `'hello'`                |
+| `replace(old, new)`  | Replaces all occurrences of a substring                               | `"cat".replace("c", "b")` → `'bat'`            |
+| `find(sub)`          | Returns index of first occurrence or `-1` if not found                | `"hello".find("e")` → `1`                      |
+| `rfind(sub)`         | Returns last occurrence index or `-1`                                 | `"hello hello".rfind("o")` → `10`              |
+| `index(sub)`         | Like `find()` but raises error if not found                           | `"abc".index("b")` → `1`                       |
+| `count(sub)`         | Counts number of occurrences of substring                             | `"banana".count("a")` → `3`                    |
+| `startswith(prefix)` | Returns `True` if string starts with prefix                           | `"hello".startswith("he")` → `True`            |
+| `endswith(suffix)`   | Returns `True` if string ends with suffix                             | `"test.py".endswith(".py")` → `True`           |
+| `split(delimiter)`   | Splits string into a list by delimiter                                | `"a,b,c".split(",")` → `['a', 'b', 'c']`       |
+| `join(iterable)`     | Joins elements of an iterable with the string as separator            | `",".join(['a','b'])` → `'a,b'`                |
+| `isalpha()`          | Returns `True` if all characters are alphabets                        | `"abc".isalpha()` → `True`                     |
+| `isdigit()`          | Returns `True` if all characters are digits                           | `"123".isdigit()` → `True`                     |
+| `isalnum()`          | Returns `True` if all characters are alphanumeric                     | `"abc123".isalnum()` → `True`                  |
+| `isspace()`          | Returns `True` if all characters are whitespace                       | `"   ".isspace()` → `True`                     |
+| `islower()`          | Returns `True` if all characters are lowercase                        | `"abc".islower()` → `True`                     |
+| `isupper()`          | Returns `True` if all characters are uppercase                        | `"ABC".isupper()` → `True`                     |
+| `swapcase()`         | Swaps case of each character                                          | `"AbC".swapcase()` → `'aBc'`                   |
+| `zfill(width)`       | Pads string on the left with zeros to make it `width` characters long | `"42".zfill(5)` → `'00042'`                    |
+| `center(width)`      | Centers the string in a field of given width                          | `"cat".center(7)` → `'  cat  '`                |
+| `ljust(width)`       | Left justifies the string                                             | `"cat".ljust(6)` → `'cat   '`                  |
+| `rjust(width)`       | Right justifies the string                                            | `"cat".rjust(6)` → `'   cat'`                  |
+| `partition(sep)`     | Splits string into 3 parts: before, sep, after                        | `"email@example.com".partition("@")`           |
+| `format()`           | Formats strings using placeholders                                    | `"Name: {}".format("John")` → `'Name: John'`   |
+| `casefold()`         | More aggressive lowercasing (for caseless matching)                   | `"Straße".casefold()` → `'strasse'`            |

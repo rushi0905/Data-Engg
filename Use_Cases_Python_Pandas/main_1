@@ -1,0 +1,90 @@
+# Use Case: Real-Time Data Pipeline with Kafka, Pandas, and SQL
+# Reads from Kafka, processes with Pandas, writes to SQL
+
+import json
+import time
+import pandas as pd
+from sqlalchemy import create_engine
+from confluent_kafka import Consumer
+
+# -------------------- CONFIG --------------------
+KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'
+KAFKA_TOPIC = 'your_topic'
+KAFKA_GROUP_ID = 'your_group'
+KAFKA_AUTO_OFFSET_RESET = 'earliest'
+KAFKA_ENABLE_AUTO_COMMIT = True
+
+DB_URL = 'mysql+pymysql://user:password@localhost/your_database'  # Change as needed
+TABLE_NAME = 'stream_data'  # SQL table name to insert into
+
+# -------------------- KAFKA CONSUMER --------------------
+def get_kafka_consumer():
+    consumer = Consumer({
+        'bootstrap.servers': KAFKA_BOOTSTRAP_SERVERS,
+        'group.id': KAFKA_GROUP_ID,
+        'auto.offset.reset': KAFKA_AUTO_OFFSET_RESET,
+        'enable.auto.commit': KAFKA_ENABLE_AUTO_COMMIT
+    })
+    consumer.subscribe([KAFKA_TOPIC])
+    return consumer
+
+def fetch_messages(consumer, max_messages=100, timeout=1.0):
+    messages = []
+    while len(messages) < max_messages:
+        msg = consumer.poll(timeout)
+        if msg is None:
+            break
+        if msg.error():
+            print(f"⚠️ Kafka error: {msg.error()}")
+        else:
+            try:
+                messages.append(json.loads(msg.value().decode('utf-8')))
+            except Exception as e:
+                print(f"⚠️ Error parsing message: {e}")
+    return messages
+
+# -------------------- DATA PROCESSING --------------------
+def transform_data(records):
+    if not records:
+        return pd.DataFrame()
+    
+    df = pd.DataFrame(records)
+
+    # Example transformation: convert 'timestamp' if exists
+    if 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
+
+    df.dropna(inplace=True)
+    return df
+
+# -------------------- SQL WRITE --------------------
+def write_to_sql(df):
+    if df.empty:
+        return
+
+    try:
+        engine = create_engine(DB_URL)
+        with engine.begin() as conn:
+            df.to_sql(TABLE_NAME, con=conn, if_exists='append', index=False, chunksize=100)
+        print(f"✅ Wrote {len(df)} records to SQL.")
+    except Exception as e:
+        print(f"❌ Error writing to database: {e}")
+
+# -------------------- MAIN LOOP --------------------
+def main():
+    consumer = get_kafka_consumer()
+    print("🚀 Real-time pipeline started...")
+    
+    try:
+        while True:
+            messages = fetch_messages(consumer, max_messages=100)
+            df = transform_data(messages)
+            write_to_sql(df)
+            time.sleep(2)  # Adjust as needed
+    except KeyboardInterrupt:
+        print("🛑 Stopping pipeline.")
+    finally:
+        consumer.close()
+
+if __name__ == "__main__":
+    main()

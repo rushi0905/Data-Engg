@@ -1,0 +1,72 @@
+import operator
+
+
+d = {1:2,3:4,4:3,5:6}
+print('original dictionary',d)
+
+sorted_d = sorted(d.items(), key=operator.itemgetter(1))
+print('dictionary in ascending order by value: ',sorted_d)
+
+sorted_d = dict(sorted(d.items(),key=operator.itemgetter(1),reverse=True))
+print('dictionary in descending order by value: ',sorted_d)
+
+# add key to dictionary 
+d.update({2:30})
+print(d)
+
+dict1 = {1:10,2:20}
+dict2 = {1:10,2:20}
+dict3 = {1:10,2:20}
+
+concat_dict = {}
+for d in (dict1,dict2,dict3):
+    concat_dict.update(d)
+print(concat_dict)
+
+# iterate over the dictionary
+d1 = {'x':10,'y':20,'z':30}
+for dict_key,dict_value in d.items:
+    print(dict_key,'-->',dict_value)
+
+# dictionary of numbers and their squares
+n = int('enter a number')
+d2 = dict()
+for x in range(1,n+1):
+    d[x] = x * x
+print(d2)
+
+# dictionary with keys 1 to 15 and their squares
+d3 = dict()
+for x in range(1,16):
+    d[x] = x ** 2
+print(d3)
+
+d4 = {'a': 100, 'b': 200}
+d5 = {'x': 300, 'y': 200}
+
+d6 = d4.copy()
+d6.update(d2)
+print(d6)
+
+my_dict = {'data1': 100, 'data2': -54, 'data3': 247}
+result = sum(my_dict(my_dict.values()))
+print(result)
+
+
+mydict = {'a':1,'b':2,'c':3,'d':4}
+print(mydict)
+if 'a' in mydict:
+    del mydict['a']
+print(mydict)
+
+keys = ['red','green','blue']
+values = ['#FF0000', '#008000', '#0000FF']
+color_dictionary = dict(zip(keys,values))
+print(color_dictionary)
+
+students = { 'name1': 'Theodore', 'name2': 'Mathew', 'name4': 'Roxanne', 'name3': 'David' }
+sorted_student=students.dict(sorted(students.items))
+print(sorted_student)
+
+my_dicct = {'x': 500, 'y': 5874, 'z': 560}
+key_max = max(my_dict.keys(),key=())

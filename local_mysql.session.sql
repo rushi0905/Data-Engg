@@ -108,3 +108,42 @@ CREATE TABLE batch_sales_summary (
     total_sales DECIMAL(10,2),
     total_quantity INT
 );
+
+----------------------------------------------------------
+-- use case 14
+
+drop table if exists products;
+
+CREATE table products(
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    price DECIMAL(10,2),
+    last_updated DATETIME
+)
+
+INSERT INTO products(product_id, product_name, category, price, last_updated) VALUES
+(101, 'Running Shoes', 'Footwear', 2999.00, '2025-07-23 10:00:00'),
+(102, 'Sports Watch', 'Accessories', 4999.00, '2025-07-23 12:00:00'),
+(103, 'Yoga Mat', 'Fitness', 899.00, '2025-07-24 15:30:00'),
+(104, 'Gym Gloves', 'Fitness', 499.00, '2025-07-25 09:00:00'),
+(105, 'Water Bottle', 'Fitness', 299.00, '2025-07-25 10:15:00');
+
+update products
+set price = 999.00,
+last_updated = '2025-07-25 11:00:00'
+WHERE product_id=103;
+
+INSERT INTO products (product_id, product_name, category, price, last_updated)
+VALUES (106, 'Treadmill Oil', 'Fitness', 149.00, '2025-07-25 11:30:00');
+
+SELECT * FROM products
+WHERE last_updated > '2025-07-25 00:00:00';
+
+----------------------------------------------------------
+-- use case 15
+show tables;
+
+describe table customers;
+show CREATE table customers;
+

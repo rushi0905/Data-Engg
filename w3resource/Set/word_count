@@ -1,0 +1,8 @@
+def word_count(words):
+    word_set = set(words)
+    word_count = {}
+    for word in word_set:
+        word_count[word] = words.count(word)
+    return word_count
+words = ['red','green','yellow','blue']
+print(word_count(words))

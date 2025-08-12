@@ -1,0 +1,39 @@
+my_tuple = (1,2,3,4)
+print(my_tuple)
+
+x = ()
+print(x)
+
+tuplex = tuple()
+print(tuplex)
+
+diff_tuple = (1,2,'ert',4.6)
+# diff_tuple = 4
+print(diff_tuple[3])
+
+gen_tuple = tuple(range(20,31))
+user_index = int(input("Enter an index (0-10)"))
+if 0 <= user_index < len(gen_tuple):
+        print(f"Element at index {user_index}:", gen_tuple[user_index])
+else:
+        print("Invalid index!")
+
+
+
+# Tuple of even numbers from 2 to 20
+even_tuple = tuple(range(2, 21, 2))
+mod_index = int(input("Enter a number for modulo index: ")) % len(even_tuple)
+print(f"Element at modulo index {mod_index}:", even_tuple[mod_index])
+
+
+tuplez = (4,5,6,7,7)
+tuplez = tuplez + (6,)
+print(tuplez)
+
+tuplez = tuplez[:5] + (15,20,25) + tuplez[:5]
+print(tuplez)
+
+listx = list(tuplez)
+listx.append(34)
+tuplez = tuple(listx)
+print(tuplez)

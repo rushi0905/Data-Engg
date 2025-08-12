@@ -88,3 +88,20 @@ def extract_employee_tree():
 def extract_sales_batch_data(file_path=r'E:\JVM DE\Data-Engg-1\Raw_Data\new_sales_data.csv'):
     df = pd.read_csv(file_path)  # Removed parse_dates because sale_date doesn't exist
     return df
+
+# use case 15
+
+def extract_data(last_sync_time):
+    try:
+        engine = create_engine(db_url)
+        query = f"""
+        SELECT * FROM products
+        WHERE last_updated > '{last_sync_time}'
+        """
+        df = pd.read_sql(query, con=engine)
+        logging.info(f"✅ Extracted {len(df)} rows from source DB.")
+        return df
+    except Exception as e:
+        logging.error("❌ Extract step failed", exc_info=True)
+        send_email("Extract step failed", str(e))
+        return pd.DataFrame()
