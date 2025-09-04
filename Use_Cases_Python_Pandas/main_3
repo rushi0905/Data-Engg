@@ -1,0 +1,103 @@
+# Use Case 3: Time Series Data Aggregation and Forecasting
+# --------------------------------------------------------
+# Objective: Load sales data, clean, aggregate, smooth, forecast,
+# and save results for reporting.
+# --------------------------------------------------------
+
+import pandas as pd
+import numpy as np
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+import matplotlib.pyplot as plt
+
+# ---------------------- EXTRACT ----------------------
+
+def extract_data():
+    """Load historical sales data from CSV"""
+    try:
+        df = pd.read_csv("data/sales_timeseries.csv", parse_dates=["sale_date"])
+    except FileNotFoundError:
+        # Generate dummy data if file not found
+        rng = pd.date_range(start="2024-01-01", end="2025-08-31", freq="D")
+        sales = np.random.randint(50, 500, size=len(rng))
+        df = pd.DataFrame({"sale_date": rng, "sale_amount": sales})
+    return df
+
+# ---------------------- TRANSFORM ----------------------
+
+def preprocess_data(df):
+    """Clean and ensure continuity in time series"""
+    df = df.sort_values("sale_date")
+    df = df.set_index("sale_date")
+
+    # Ensure daily continuity
+    df = df.asfreq("D")
+
+    # Fill missing sales with forward fill (or 0 if no prior value)
+    df["sale_amount"] = df["sale_amount"].fillna(method="ffill").fillna(0)
+
+    return df
+
+def aggregate_data(df):
+    """Aggregate to weekly and monthly totals"""
+    weekly = df["sale_amount"].resample("W").sum()
+    monthly = df["sale_amount"].resample("M").sum()
+
+    # Apply rolling window smoothing (7-day moving average)
+    df["rolling_avg"] = df["sale_amount"].rolling(window=7, min_periods=1).mean()
+
+    return df, weekly, monthly
+
+# ---------------------- FORECAST ----------------------
+
+def forecast_sales(monthly, periods=3):
+    """Forecast future sales using Exponential Smoothing"""
+    model = ExponentialSmoothing(monthly, trend="add", seasonal="add", seasonal_periods=12)
+    fit = model.fit()
+
+    forecast = fit.forecast(periods)
+    return forecast
+
+# ---------------------- LOAD ----------------------
+
+def save_results(df, weekly, monthly, forecast):
+    """Save results into CSV files"""
+    df.to_csv("data/cleaned_sales_daily.csv")
+    weekly.to_csv("data/sales_weekly.csv")
+    monthly.to_csv("data/sales_monthly.csv")
+    forecast.to_csv("data/sales_forecast.csv", header=["forecast"])
+
+    print("✅ Results saved to CSV (daily, weekly, monthly, forecast)")
+
+    # Optional: plot results
+    plt.figure(figsize=(10,6))
+    plt.plot(monthly, label="Monthly Sales")
+    plt.plot(forecast, label="Forecast", linestyle="--")
+    plt.legend()
+    plt.title("Monthly Sales & Forecast")
+    plt.savefig("data/sales_forecast_plot.png")
+    print("📊 Forecast plot saved to data/sales_forecast_plot.png")
+
+# ---------------------- RUN ETL ----------------------
+
+def run_pipeline():
+    print("🚀 Starting Time Series ETL pipeline...")
+
+    # Extract
+    df = extract_data()
+
+    # Transform
+    df_clean = preprocess_data(df)
+    df_daily, weekly, monthly = aggregate_data(df_clean)
+
+    # Forecast
+    forecast = forecast_sales(monthly, periods=3)
+
+    # Load
+    save_results(df_daily, weekly, monthly, forecast)
+
+    print("🎉 Time Series ETL pipeline completed successfully!")
+
+# ---------------------- MAIN ----------------------
+
+if __name__ == "__main__":
+    run_pipeline()

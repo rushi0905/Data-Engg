@@ -254,3 +254,57 @@ Data skewness in Spark refers to the situation where data is distributed unevenl
 
 ================================================================================================================================
 
+## what is pipeline orchestration ?
+
+Pipeline orchestration refers to the coordinated scheduling, management, and automation of data flows and processes within a pipeline.
+
+================================================================================================================================
+
+What are Iterators and Generators?
+Iterator: An object that produces values one at a time when requested. Built-in Python objects like files are iterators.
+
+Generator: A special type of iterator defined with yield instead of return. It generates values on the fly and saves memory.
+
+================================================================================================================================
+
+⭐ Star Schema vs ❄️ Snowflake Schema
+1. Star Schema
+
+Central Fact Table (sales, transactions, etc.) connected directly to multiple Dimension Tables (customer, product, time, region).
+
+Dimension tables are denormalized → contain full descriptive data.
+
+Easy to understand, faster query performance (fewer joins).
+
+👉 Example (Retail Sales):
+
+Fact_Sales (sale_id, customer_id, product_id, time_id, sales_amount, quantity)
+Dim_Customer (customer_id, name, age, region)
+Dim_Product  (product_id, product_name, category, price)
+Dim_Time     (time_id, date, month, year)
+
+2. Snowflake Schema
+
+Extension of star schema → dimensions are normalized into multiple related tables.
+
+Reduces data redundancy, but queries require more joins (slower).
+
+Useful when dimensions are very large or hierarchical.
+
+👉 Example (Retail Sales – normalized product dimension):
+
+Fact_Sales (sale_id, customer_id, product_id, time_id, sales_amount, quantity)
+Dim_Customer (customer_id, name, age, region)
+Dim_Product  (product_id, product_name, category_id, price)
+Dim_Category (category_id, category_name)
+Dim_Time     (time_id, date, month_id, year)
+Dim_Month    (month_id, month_name, year_id)
+Dim_Year     (year_id, year)
+
+================================================================================================================================
+
+
+Summary Table
+Term	Spark Example	Pandas Example	Timing
+Transformation	filter(), map(), select()	.apply(), .assign(), .groupby()	Lazy (Spark), Eager (Pandas)
+Action	show(), count(), write()	.sum(), .to_csv(), .plot()	Triggers computation/output

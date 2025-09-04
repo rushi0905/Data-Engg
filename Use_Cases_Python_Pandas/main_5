@@ -1,0 +1,133 @@
+# Use Case 5: Complex Data Transformation Pipeline with Multi-Step Transformations
+# --------------------------------------------------------
+# Objective: Extract -> Cleanse -> Feature Engineering -> Transform -> Load
+# --------------------------------------------------------
+
+import pandas as pd
+import numpy as np
+import logging
+from sqlalchemy import create_engine
+
+# ---------------------- SETUP LOGGING ----------------------
+logging.basicConfig(
+    filename="logs/complex_pipeline.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# ---------------------- EXTRACT ----------------------
+def extract_data():
+    """Read raw data from CSV (simulate if file not found)."""
+    try:
+        df = pd.read_csv("data/raw_extended_sales.csv")
+        logging.info("Data extracted successfully from CSV.")
+    except FileNotFoundError:
+        logging.warning("File not found. Generating dummy data.")
+        df = pd.DataFrame({
+            "order_id": range(1, 11),
+            "customer_id": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+            "region": ["East", "West", "North", "South", "West", "East", "North", "South", "West", "East"],
+            "sale_amount": [200, 300, 150, 400, 500, 250, np.nan, 800, 900, 1000],
+            "quantity": [2, 3, 1, 4, 5, 2, 3, 8, np.nan, 10],
+            "sale_date": pd.date_range(start="2025-01-01", periods=10, freq="D")
+        })
+    return df
+
+# ---------------------- STAGE 1: CLEANSE ----------------------
+def cleanse_data(df):
+    """Handle missing values, duplicates, fix data types."""
+    try:
+        # Drop duplicates
+        df = df.drop_duplicates()
+
+        # Fill missing numeric values with median
+        df["sale_amount"].fillna(df["sale_amount"].median(), inplace=True)
+        df["quantity"].fillna(df["quantity"].median(), inplace=True)
+
+        # Ensure correct dtypes
+        df["sale_date"] = pd.to_datetime(df["sale_date"])
+
+        logging.info("Data cleansing completed.")
+    except Exception as e:
+        logging.error(f"Error during cleansing: {str(e)}", exc_info=True)
+    return df
+
+# ---------------------- STAGE 2: FEATURE ENGINEERING ----------------------
+def feature_engineering(df):
+    """Create new calculated features."""
+    try:
+        # Sales per unit
+        df["sales_per_unit"] = df["sale_amount"] / df["quantity"]
+
+        # Flag high value sales
+        df["high_value"] = df["sale_amount"] > df["sale_amount"].mean()
+
+        logging.info("Feature engineering completed.")
+    except Exception as e:
+        logging.error(f"Error during feature engineering: {str(e)}", exc_info=True)
+    return df
+
+# ---------------------- STAGE 3: COMPLEX TRANSFORMATIONS ----------------------
+def complex_transformations(df):
+    """Apply pivoting, reshaping, and time-based aggregation."""
+    try:
+        # Aggregate sales by month
+        df["month"] = df["sale_date"].dt.to_period("M")
+        monthly_sales = df.groupby("month")["sale_amount"].sum().reset_index()
+
+        # Pivot: region-wise monthly sales
+        pivot_sales = df.pivot_table(
+            index="month",
+            columns="region",
+            values="sale_amount",
+            aggfunc="sum",
+            fill_value=0
+        ).reset_index()
+
+        # Merge both (keep both aggregated + pivoted views)
+        transformed = monthly_sales.merge(pivot_sales, on="month", how="left")
+
+        logging.info("Complex transformations completed.")
+    except Exception as e:
+        logging.error(f"Error during transformations: {str(e)}", exc_info=True)
+        transformed = df
+    return transformed
+
+# ---------------------- STAGE 4: LOAD ----------------------
+def load_data(df):
+    """Save transformed data into CSV and SQL."""
+    try:
+        df.to_csv("data/transformed_sales.csv", index=False)
+        logging.info("Transformed data saved to CSV.")
+
+        # Optional: load to SQL
+        engine = create_engine("mysql+pymysql://root:password@localhost:3306/testdb")
+        df.to_sql("transformed_sales", engine, if_exists="replace", index=False)
+        logging.info("Transformed data loaded into SQL table: transformed_sales")
+    except Exception as e:
+        logging.error(f"Error during loading: {str(e)}", exc_info=True)
+
+# ---------------------- RUN PIPELINE ----------------------
+def run_pipeline():
+    print("🚀 Starting Complex Data Transformation Pipeline...")
+
+    # Stage 0: Extract
+    df = extract_data()
+
+    # Stage 1: Cleanse
+    df = cleanse_data(df)
+
+    # Stage 2: Feature Engineering
+    df = feature_engineering(df)
+
+    # Stage 3: Complex Transformations
+    transformed_df = complex_transformations(df)
+
+    # Stage 4: Load
+    load_data(transformed_df)
+
+    print("🎉 Pipeline completed successfully!")
+
+# ---------------------- MAIN ----------------------
+if __name__ == "__main__":
+    run_pipeline()

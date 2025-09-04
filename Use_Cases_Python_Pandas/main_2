@@ -1,0 +1,105 @@
+# Use Case 2: Data Integration Across Multiple Sources (SQL + CSV + API)
+# -------------------------------------------------------------
+# Objective: Extract data from SQL, CSV, and an API,
+# transform (merge/clean/aggregate), and load into a unified dataset.
+# -------------------------------------------------------------
+
+import pandas as pd
+import requests
+from sqlalchemy import create_engine
+
+# ---------------------- EXTRACT ----------------------
+
+def extract_sql():
+    """Extract data from SQL database"""
+    engine = create_engine("mysql+pymysql://root:password@localhost:3306/testdb")
+    query = "SELECT order_id, customer_id, product_id, order_date, amount FROM orders"
+    df_orders = pd.read_sql(query, engine)
+    return df_orders
+
+def extract_csv():
+    """Extract data from CSV file"""
+    df_customers = pd.read_csv("data/customers.csv")
+    return df_customers
+
+def extract_api():
+    """Extract data from external API"""
+    url = "https://fakestoreapi.com/products"
+    response = requests.get(url)
+    data = response.json()
+    
+    # Flatten relevant fields
+    products = [
+        {
+            "product_id": item["id"],
+            "product_name": item["title"],
+            "category": item["category"]
+        }
+        for item in data
+    ]
+    df_products = pd.DataFrame(products)
+    return df_products
+
+# ---------------------- TRANSFORM ----------------------
+
+def transform_data(df_orders, df_customers, df_products):
+    """Clean, merge, and enrich data"""
+    
+    # Standardize column names
+    df_customers.rename(columns={"name": "customer_name"}, inplace=True)
+    
+    # Merge orders with customers
+    merged_df = pd.merge(df_orders, df_customers, on="customer_id", how="left")
+    
+    # Merge with products
+    merged_df = pd.merge(merged_df, df_products, on="product_id", how="left")
+    
+    # Convert date format
+    merged_df["order_date"] = pd.to_datetime(merged_df["order_date"])
+    
+    # Add new column - year-month for reporting
+    merged_df["year_month"] = merged_df["order_date"].dt.to_period("M")
+    
+    # Handle missing values
+    merged_df.fillna({"customer_name": "Unknown", 
+                      "region": "Unknown", 
+                      "product_name": "Unknown"}, inplace=True)
+    
+    return merged_df
+
+# ---------------------- LOAD ----------------------
+
+def load_to_csv(df_final):
+    """Save final dataset to CSV"""
+    df_final.to_csv("data/final_reporting_dataset.csv", index=False)
+    print("✅ Data successfully written to data/final_reporting_dataset.csv")
+
+def load_to_sql(df_final):
+    """Load final dataset into SQL table"""
+    engine = create_engine("mysql+pymysql://root:password@localhost:3306/testdb")
+    df_final.to_sql("reporting_dataset", engine, if_exists="replace", index=False)
+    print("✅ Data successfully written to SQL table reporting_dataset")
+
+# ---------------------- RUN ETL ----------------------
+
+def run_pipeline():
+    print("🚀 Starting ETL pipeline...")
+
+    # Extract
+    df_orders = extract_sql()
+    df_customers = extract_csv()
+    df_products = extract_api()
+
+    # Transform
+    df_final = transform_data(df_orders, df_customers, df_products)
+
+    # Load
+    load_to_csv(df_final)
+    load_to_sql(df_final)
+
+    print("🎉 ETL pipeline completed successfully!")
+
+# ---------------------- MAIN ----------------------
+
+if __name__ == "__main__":
+    run_pipeline()

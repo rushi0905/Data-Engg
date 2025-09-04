@@ -1,0 +1,127 @@
+# Use Case 4: Data Cleansing and Quality Assurance Pipeline
+# --------------------------------------------------------
+# Objective: Validate, clean, and store data while logging quality issues.
+# --------------------------------------------------------
+
+import pandas as pd
+import numpy as np
+import logging
+from sqlalchemy import create_engine
+
+# ---------------------- SETUP LOGGING ----------------------
+logging.basicConfig(
+    filename="logs/data_quality.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# ---------------------- EXTRACT ----------------------
+def extract_data():
+    """Simulate extracting data from CSV"""
+    try:
+        df = pd.read_csv("data/raw_sales.csv")
+        logging.info("Data extracted successfully from CSV")
+    except FileNotFoundError:
+        logging.error("File not found: data/raw_sales.csv. Generating dummy data instead.")
+        df = pd.DataFrame({
+            "order_id": range(1, 11),
+            "customer_id": [101, 102, np.nan, 104, 105, 105, 107, 108, 109, 110],
+            "amount": [200, 300, -50, 4000, 500, 600, 100000, 800, 900, 1000],
+            "region": ["East", "West", "North", "South", "West", "West", "East", "Central", "East", None]
+        })
+    return df
+
+# ---------------------- VALIDATE ----------------------
+def validate_data(df):
+    """Check for data quality issues"""
+    issues = []
+
+    # Missing values
+    if df.isnull().sum().sum() > 0:
+        issues.append(f"Missing values found: {df.isnull().sum().to_dict()}")
+
+    # Duplicates
+    if df.duplicated().sum() > 0:
+        issues.append(f"Duplicate rows: {df.duplicated().sum()}")
+
+    # Range check for amount
+    if (df["amount"] < 0).any():
+        issues.append("Negative sales amount detected.")
+
+    # Domain check for region
+    valid_regions = {"East", "West", "North", "South", "Central"}
+    invalid_regions = set(df["region"].dropna()) - valid_regions
+    if invalid_regions:
+        issues.append(f"Invalid regions detected: {invalid_regions}")
+
+    for issue in issues:
+        logging.warning(issue)
+
+    if not issues:
+        logging.info("No data quality issues found.")
+
+    return issues
+
+# ---------------------- CLEAN ----------------------
+def clean_data(df):
+    """Clean data by fixing anomalies"""
+    try:
+        # Handle missing values
+        df["customer_id"].fillna(-1, inplace=True)  # flag as -1
+        df["region"].fillna("Unknown", inplace=True)
+
+        # Remove duplicates
+        df = df.drop_duplicates()
+
+        # Fix negative values
+        df.loc[df["amount"] < 0, "amount"] = 0
+
+        # Cap outliers (using IQR method)
+        Q1 = df["amount"].quantile(0.25)
+        Q3 = df["amount"].quantile(0.75)
+        IQR = Q3 - Q1
+        upper_bound = Q3 + 1.5 * IQR
+        df.loc[df["amount"] > upper_bound, "amount"] = upper_bound
+
+        logging.info("Data cleaned successfully.")
+    except Exception as e:
+        logging.error(f"Error during cleaning: {str(e)}", exc_info=True)
+    return df
+
+# ---------------------- LOAD ----------------------
+def load_data(df):
+    """Save cleaned data into CSV and SQL"""
+    try:
+        df.to_csv("data/cleaned_sales.csv", index=False)
+        logging.info("Cleaned data saved to CSV.")
+
+        # Optional: load to SQL
+        engine = create_engine("mysql+pymysql://root:password@localhost:3306/testdb")
+        df.to_sql("cleaned_sales", engine, if_exists="replace", index=False)
+        logging.info("Cleaned data loaded into SQL table: cleaned_sales")
+    except Exception as e:
+        logging.error(f"Error saving data: {str(e)}", exc_info=True)
+
+# ---------------------- RUN PIPELINE ----------------------
+def run_pipeline():
+    print("🚀 Starting Data Cleansing & QA Pipeline...")
+
+    # Extract
+    df = extract_data()
+
+    # Validate
+    issues = validate_data(df)
+    if issues:
+        print("⚠️ Data quality issues found. Check logs/data_quality.log")
+
+    # Clean
+    df_clean = clean_data(df)
+
+    # Load
+    load_data(df_clean)
+
+    print("🎉 Pipeline completed successfully!")
+
+# ---------------------- MAIN ----------------------
+if __name__ == "__main__":
+    run_pipeline()
